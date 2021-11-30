@@ -5,5 +5,5 @@ This repo will be source for progress on my studies at SWE573 course at Bogazici
 
 This repo will be modified regularly for tracking tasks and issues while achieving assignments discussed weekly basis.
 
-Project Name : socializeMe
+Project Name : socializeMe  
 Project Topic: Web application for matching people for offering and getting service
