@@ -2,14 +2,18 @@
 
 {% block content %}
 
-<h1> Home Template </h1>
+<h1> socializeUS Offerings </h1>
 
 <div>
+    <a href="{% url 'create-offer' %}" > New Offer </a>
+    <hr>
 
     <div>        
         {% for offer_name in offers %}
             <div>
+                <span>@ {{ offer_name.providerID}}</span>
                 <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
+                <hr>
             </div>
         {% endfor %}
     </div>

@@ -1,14 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Offering
+from .forms import OfferForm
 # My views
 
-offers = [
-    {'id':1, 'name':'Lets Cook'},
-    {'id':2, 'name':'Math is the secret of life'},
-    {'id':3, 'name':'Look upto Sky'},
-]
 
 def home(request):
     offers = Offering.objects.all()
@@ -25,3 +21,12 @@ def offerings(request, ofnum):
     return render(request, 'base/offerings.html', context)
 #    return HttpResponse('Offering Page')
 
+def createOffer(request):
+    form = OfferForm()
+    if request.method == 'POST':
+        form = OfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'form': form}
+    return render(request, 'base/create_offering.html', context)
