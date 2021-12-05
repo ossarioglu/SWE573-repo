@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1> Home Template </h1>
+
+<div>
+
+    <div>        
+        {% for offer_name in offers %}
+            <div>
+                <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock content %}
