@@ -9,9 +9,15 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+class Tag(models.Model):
+    tagName = models.CharField(primary_key = True,max_length=10)
+
+    def __str__(self):
+        return self.tagName
 
 class Offering(models.Model):
     serviceID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10,default='New')
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(max_length=100)
@@ -44,3 +50,4 @@ class Feedback(models.Model):
 
     def __str__(self):
         return self.comment[0:20]
+

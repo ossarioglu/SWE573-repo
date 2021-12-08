@@ -11,8 +11,11 @@
     <div>        
         {% for offer_name in offers %}
             <div>
+                <a href="{% url 'update-offer' offer_name.serviceID %}" > Edit </a>
+                <a href="{% url 'delete-offer' offer_name.serviceID %}" > Delete </a>
                 <span>@ {{ offer_name.providerID}}</span>
                 <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
+                <small>{{ offer_name.tag}}</small>
                 <hr>
             </div>
         {% endfor %}

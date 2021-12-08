@@ -30,3 +30,22 @@ def createOffer(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/create_offering.html', context)
+
+def updateOffer(request, ofNum):
+    offer = Offering.objects.get(serviceID=ofNum)
+    form = OfferForm(instance=offer)
+
+    if request.method == 'POST':
+        form = OfferForm(request.POST, instance=offer)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'form':form}
+    return render(request, 'base/create_offering.html', context)
+
+def deleteOffer(request, ofNum):
+    offer = Offering.objects.get(serviceID=ofNum)
+    if request.method == 'POST':
+        offer.delete()
+        return redirect('home')
+    return render(request, 'base/delete.html', {'obj':offer})
