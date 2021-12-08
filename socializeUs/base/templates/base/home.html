@@ -2,24 +2,50 @@
 
 {% block content %}
 
-<h1> socializeUS Offerings </h1>
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr; 
+    }
 
-<div>
-    <a href="{% url 'create-offer' %}" > New Offer </a>
-    <hr>
+</style>
 
-    <div>        
-        {% for offer_name in offers %}
+<div class="home-container">
+
+    <div>
+        <h1> Offerings @ socializeUS </h1>
+        <hr>
+        
+        <div>
+            <a href="{% url 'home' %}">All</a>
+        </div>
+        
+        {% for tag in tags %}
             <div>
-                <a href="{% url 'update-offer' offer_name.serviceID %}" > Edit </a>
-                <a href="{% url 'delete-offer' offer_name.serviceID %}" > Delete </a>
-                <span>@ {{ offer_name.providerID}}</span>
-                <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
-                <small>{{ offer_name.tag}}</small>
-                <hr>
+                <a href="{% url 'home'%}?q={{tag.tagName}}">{{tag.tagName}}</a>
             </div>
         {% endfor %}
     </div>
+
+    <div>
+        <h1> Listed Offerings </h1>
+        <a href="{% url 'create-offer' %}" > New Offer </a>
+        <hr>
+    
+        <div>        
+            {% for offer_name in offers %}
+                <div>
+                    <a href="{% url 'update-offer' offer_name.serviceID %}" > Edit </a>
+                    <a href="{% url 'delete-offer' offer_name.serviceID %}" > Delete </a>
+                    <span>@ {{ offer_name.providerID}}</span>
+                    <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
+                    <small>{{ offer_name.tag}}</small>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
 
 </div>
 
