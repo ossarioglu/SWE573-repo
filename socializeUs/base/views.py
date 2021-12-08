@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.db.models import Q
 
 from .models import Offering, Tag
 from .forms import OfferForm
@@ -8,10 +9,18 @@ from .forms import OfferForm
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    offers = Offering.objects.filter(tag__tagName__contains=q)
-    tags = Tag.objects.all()
     
-    context = {'offers':offers, 'tags':tags}
+    offers = Offering.objects.filter(
+        Q(tag__tagName__icontains=q) |
+        Q(keywords__icontains=q) |
+        Q(serviceInfo__icontains=q) 
+    )
+
+    tags = Tag.objects.all()
+    offer_count = offers.count()
+
+
+    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count}
     return render(request, 'base/home.html', context)
 
 def offerings(request, ofnum):
