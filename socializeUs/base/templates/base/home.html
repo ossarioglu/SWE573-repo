@@ -36,11 +36,19 @@
         <div>        
             {% for offer_name in offers %}
                 <div>
-                    <a href="{% url 'update-offer' offer_name.serviceID %}" > Edit </a>
-                    <a href="{% url 'delete-offer' offer_name.serviceID %}" > Delete </a>
+                    <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
+                    {% if request.user == offer_name.providerID %}
+                        <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                        <h6>  </h6>
+                    {% endif %}
                     <span>@ {{ offer_name.providerID}}</span>
-                    <h5>{{ offer_name.serviceID}} - <a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a> </h5>
-                    <small>{{ offer_name.tag}}</small>
+                    <p class="text-secondary">
+                        <h6>on {{ offer_name.startingDate}}</h6>
+                        <h6>for {{ offer_name.duration}} hours</h6>
+                        <h6>at {{ offer_name.location}}</h6>
+                        <small>{{ offer_name.tag}}</small>
+                    </p>
                     <hr>
                 </div>
             {% endfor %}

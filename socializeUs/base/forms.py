@@ -5,3 +5,4 @@ class OfferForm(ModelForm):
     class Meta:
         model = Offering
         fields = '__all__'
+        exclude = ['providerID']
