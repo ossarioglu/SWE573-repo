@@ -92,7 +92,8 @@ def userProfile(request, userKey):
     offers = Offering.objects.all()
     
     context = {'user':user, 'offers':offers, 'profiles':profiles}
-    return render(request, 'landing/profile.html', context)
+    return render(request, 'landing/profile.html', context) 
+    
 
 @login_required(login_url='login')
 def createOffer(request):
