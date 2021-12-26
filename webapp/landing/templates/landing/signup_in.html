@@ -1,0 +1,51 @@
+{% extends 'main.html'%}
+
+{% block content %}
+
+<!--div>
+    <form method="POST" accept="">
+        {% csrf_token %}
+
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Enter Username" />
+
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Password" />
+
+        <input type="submit" name="Login" />
+
+    </form>
+
+</div-->
+
+<div>
+    <form method="POST" accept="">
+        {% csrf_token %}
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Enter Username">
+            <label for="floatingInput">Username</label>
+
+            <!--label>Username:</label>
+            <input type="text" name="username" placeholder="Enter Username" /-->
+        </div>
+
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+            
+            <!--label>Password:</label>
+            <input type="password" name="password" placeholder="Password" /-->
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-outline-success" type="submit">Sign In</button>
+        </div>
+
+        <!-- input type="submit" name="Register" /-->
+
+    </form>
+
+</div>
+
+{% endblock content %}

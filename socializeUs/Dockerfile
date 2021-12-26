@@ -1,11 +1,8 @@
-FROM python:3.8-slim-buster
-
-WORKDIR /app
-
-COPY requirements.txt requirements.txt 
-
-RUN pip3 install -r requirements.txt
-
-COPY . .
-
-CMD [ "python3", "manage.py", "runserver", "0.0.0.0:8080"]
+# syntax=docker/dockerfile:1
+FROM python:3
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+WORKDIR /webapp
+COPY requirements.txt /webapp/
+RUN pip install -r requirements.txt
+COPY . /webapp/

@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr; 
+    }
+
+</style>
+
+<div class="home-container">
+
+    <div>
+        <h1> Offerings @ socializeUS </h1>
+        <hr>
+        
+        <div>
+            <a href="{% url 'home' %}">All</a>
+        </div>
+        
+        {% for tag in tags %}
+            <div>
+                <a href="{% url 'home'%}?q={{tag.tagName}}">{{tag.tagName}}</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h5>{{ offer_count }} offerings available </h5>
+        <h1> Listed Offerings </h1>
+        <a href="{% url 'create-offer' %}" > New Offer </a>
+        <hr>
+    
+        <div>        
+            {% for offer_name in offers %}
+                <div>
+                    <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
+                    {% if request.user == offer_name.providerID %}
+                        <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                        <h6>  </h6>
+                    {% endif %}
+                    <span>@ {{ offer_name.providerID}}</span>
+                    <p class="text-secondary">
+                        <h6>on {{ offer_name.startingDate}}</h6>
+                        <h6>for {{ offer_name.duration}} hours</h6>
+                        <h6>at {{ offer_name.location}}</h6>
+                        <small>{{ offer_name.tag}}</small>
+                    </p>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+</div>
+
+{% endblock content %}
