@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('login/', views.signinPage, name="login"),
     path('logout/', views.signOut, name="logout"),
+    path('signup/', views.signUpPage, name="signup"),
 
     path('', views.home, name="home"),
     path('offerings/<str:ofnum>/', views.offerings, name ="offerings"), 
@@ -12,5 +13,8 @@ urlpatterns = [
     path('update-offer/<str:ofNum>/', views.updateOffer, name ="update-offer"), 
     path('delete-offer/<str:ofNum>/', views.deleteOffer, name ="delete-offer"), 
     path('delete-offer/<str:ofNum>/', views.deleteOffer, name ="delete-offer"), 
+
+    path('profile/<str:userKey>/', views.userProfile, name ="user-profile"), 
+
 
 ]

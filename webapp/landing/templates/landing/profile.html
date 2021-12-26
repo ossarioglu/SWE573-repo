@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .profile-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr; 
+    }
+</style>
+
+
+<style>
+    .profile-details{
+        display: grid;
+        grid-template-columns: 2fr 2fr; 
+    }
+</style>
+
+<div class="profile-container">
+    <div></div>
+
+    <div>
+        <hr>  
+        <div style="display:grid;grid-template-columns: 5fr 1fr;">
+            <div>      
+                <h3> {{user.first_name}} {{user.last_name}}</h3>
+            </div>
+            <div>
+                <a class="btn btn-success btn-sm" href="" role="button">Edit Profile</a>
+            </div>
+        </div>
+        <hr>  
+
+
+        {% for profile_name in profiles %}
+            {% if request.user == profile_name.user %}
+
+            <span class="profile-details">
+
+                <div>
+                    <h5> Picture: {{profile_name.userPicture}</h5>
+                </div>
+
+                <div>
+                    <h6> Username: {{user.username}}</h6>
+                    <h6> Rating: {{profile_name.userReputation}}</h6>
+                    <h6> Credit: {{profile_name.creditAmount}}</h6>
+                </div>   
+            </span>
+            <hr>
+
+            <span class="profile-details">
+                <div>
+                    <h6> email: {{user.email}}</h6>
+                    <h6> User Type: {{profile_name.userType}}</h6>
+                    <h6> Location: {{profile_name.userLocation}}</h6>
+                    <h6> Credit In Process : {{profile_name.creditInprocess}}</h6>   
+                </div>
+
+                <div>
+                    <h6> Details: {{profile_name.userDetails}</h6>
+                </div>
+            </span> 
+            {% endif %}
+        {% endfor %}    
+            
+            <span>
+                <hr>  
+                <h4>Activities</h4>
+                <hr>  
+        {% for offer_name in offers %}
+            {% if request.user == offer_name.providerID %}
+
+                <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
+                {% if request.user == offer_name.providerID %}
+                    <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                    <h6>  </h6>
+                {% endif %}
+                <span>@ {{ offer_name.providerID}}</span>
+                <p class="text-secondary">
+                    <h6>on {{ offer_name.startingDate}}</h6>
+                    <h6>for {{ offer_name.duration}} hours</h6>
+                    <h6>at {{ offer_name.location}}</h6>
+                    <small>{{ offer_name.tag}}</small>
+                </p>
+                <hr>    
+
+            {% endif %}
+        {% endfor %}
+            </span>
+    </div>
+
+    <div>
+        
+    </div>
+
+
+</div>
+
+{% endblock content %}

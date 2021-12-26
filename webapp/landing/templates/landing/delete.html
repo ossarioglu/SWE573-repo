@@ -2,11 +2,27 @@
 
 {% block content %}
 
-<form method="POST" accept="">
-    {% csrf_token %}
-    <p> Are you sure you want to delete " {{obj}}"?</p>   
-    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
-    <input type="submit" value="Confirm" />
-</form>
+<style>
+    .delete-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr; 
+    }
+</style>
+
+<div class="delete-container">
+    <div></div>
+    <div>
+        <form method="POST" accept="">
+            {% csrf_token %}
+            <p> Are you sure you want to delete " {{obj}}"?</p>   
+            <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+            <input type="submit" value="Confirm" />
+        </form>
+    </div>
+    <div></div>
+
+</div>
+
+
 
 {% endblock content %}

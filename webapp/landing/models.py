@@ -10,9 +10,9 @@ class Profile(models.Model):
     userType = models.CharField(max_length=10)
     userReputation = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     creditAmount = models.PositiveIntegerField(editable=True,default=10)
-    userDetails = models.TextField(max_length=200,null=True,blank=True)
+    userDetails = models.TextField(max_length=200,null=True)
     userLocation = models.CharField(max_length=50)
-    userPicture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)
+    userPicture = models.ImageField(upload_to='profile_images', height_field=None, width_field=None, max_length=100)
     creditInprocess = models.IntegerField(default=0)
     def __str__(self):
         return f'{self.user.username}'

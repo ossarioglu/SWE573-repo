@@ -2,7 +2,28 @@
 
 {% block content %}
 
-<h1> {{ offers.keywords }}</h1>
-<h2> {{ offers.status }}</h2>
-<h3> {{ offers.serviceInfo }}</h3>
+<style>
+    .offerings-container{
+        display: grid;
+        grid-template-columns: 1fr 5fr 1fr; 
+    }
+</style>
+
+<div class="offerings-container">
+        <div>
+
+        </div>
+
+        <div>
+            <h1> {{ offers.keywords }}</h1>
+            <h2> {{ offers.status }}</h2>
+            <h3> {{ offers.serviceInfo }}</h3>
+        </div>
+
+        <div>
+
+        </div>
+</div>
+
+
 {% endblock content %}

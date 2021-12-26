@@ -31,7 +31,7 @@
                     {{ request.user }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href=" {% url 'user-profile' request.user %}">Profile</a>
                     <a class="dropdown-item" href="#">Actions</a>
                     <a class="dropdown-item" href="#">History</a>
                     <div class="dropdown-divider"></div>
@@ -42,8 +42,8 @@
             
         {% else %}
             <div class="col-2">
-                <a class="btn btn-primary" href="{% url 'login' %}" role="button">Sing In</a>
-                <a class="btn btn-success" href="{% url 'login' %}" role="button">Sing Up</a>
+                <a class="btn btn-primary" href="{% url 'login' %}" role="button">Sign In</a>
+                <a class="btn btn-success" href="{% url 'signup' %}" role="button">Sign Up</a>
             </div> 
         {% endif %}
 

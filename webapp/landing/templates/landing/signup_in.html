@@ -18,34 +18,82 @@
 
 </div-->
 
-<div>
-    <form method="POST" accept="">
-        {% csrf_token %}
+<style>
+    .login-container{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; 
+    }
+</style>
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Enter Username">
-            <label for="floatingInput">Username</label>
+<div class="login-container">
 
-            <!--label>Username:</label>
-            <input type="text" name="username" placeholder="Enter Username" /-->
-        </div>
+    <div>
 
-        <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
-            <label for="floatingPassword">Password</label>
-            
-            <!--label>Password:</label>
-            <input type="password" name="password" placeholder="Password" /-->
-        </div>
+    </div>
 
-        <div class="col-12">
-            <button class="btn btn-outline-success" type="submit">Sign In</button>
-        </div>
+    {% if page == 'signin' %}
+    <div>
+        <form method="POST" accept="">
+            {% csrf_token %}
 
-        <!-- input type="submit" name="Register" /-->
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Enter Username">
+                <label for="floatingInput">Username</label>
 
-    </form>
+                <!--label>Username:</label>
+                <input type="text" name="username" placeholder="Enter Username" /-->
+            </div>
 
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+                
+                <!--label>Password:</label>
+                <input type="password" name="password" placeholder="Password" /-->
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-outline-primary" type="submit">Sign In</button>
+            </div>
+
+            <!-- input type="submit" name="Register" /-->
+
+        </form>
+
+        <p> Haven't signed up yet?</p>
+        <a class="btn btn-outline-success" href="{% url 'signup' %}" role="button"> Sign Up</a>
+
+    </div>
+
+
+    {% else %}
+
+    <div>   
+        <form method="POST" accept="">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+            <div class="col-12">
+                <button class="btn btn-outline-success" type="submit">Sign Up</button>
+            </div>
+
+            <!-- input type="submit" name="Register" /-->
+
+        </form>
+
+        <p> Already signed up yet?</p>
+        <a class="btn btn-outline-primary" href="{% url 'login' %}" role="button"> Sign In</a>
+
+    </div>
+    {% endif %}
+
+
+    <div>
+        
+    </div>
+    
 </div>
+
+
 
 {% endblock content %}

@@ -2,12 +2,26 @@
 
 {% block content %}
 
-<div>
-    <form method="POST" action="" >
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Submit" />
-    </form>
+<style>
+    .create-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr; 
+    }
+</style>
+
+<div class="create-container">
+    <div></div>
+    <div>
+        <form method="POST" action="" >
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+    <div></div>
+
 </div>
+
+
 
 {% endblock content %}

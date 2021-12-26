@@ -1,3 +1,4 @@
+from typing import ContextManager
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -6,19 +7,21 @@ from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
+from django.contrib.auth.forms import UserCreationForm
 
-from .models import Offering, Tag
+from .models import Offering, Tag, Profile
 from .forms import OfferForm
 # My views
 
 
 def signinPage(request):
+    page = 'signin'
     
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
         try:
@@ -34,12 +37,28 @@ def signinPage(request):
         else:
             messages.error(request, 'Username or password is not matching')
 
-    context = {}
+    context = {'page':page}
     return render(request, 'landing/signup_in.html', context)
 
 def signOut(request):
     logout(request)
     return redirect('home')
+
+def signUpPage(request):
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request,user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occured during registration')
+            
+    return render(request, 'landing/signup_in.html', {'form':form})
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -66,6 +85,14 @@ def offerings(request, ofnum):
     context = {'offers':offer}
     return render(request, 'landing/offerings.html', context)
 #    return HttpResponse('Offering Page')
+
+def userProfile(request, userKey):
+    user = User.objects.get(username=userKey)
+    profiles = Profile.objects.all()
+    offers = Offering.objects.all()
+    
+    context = {'user':user, 'offers':offers, 'profiles':profiles}
+    return render(request, 'landing/profile.html', context)
 
 @login_required(login_url='login')
 def createOffer(request):
