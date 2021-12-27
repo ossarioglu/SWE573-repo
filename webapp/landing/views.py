@@ -88,10 +88,8 @@ def offerings(request, ofnum):
 
 def userProfile(request, userKey):
     user = User.objects.get(username=userKey)
-    profiles = Profile.objects.all()
-    offers = Offering.objects.all()
-    
-    context = {'user':user, 'offers':offers, 'profiles':profiles}
+    offers = user.offering_set.all()
+    context = {'user':user, 'offers':offers}
     return render(request, 'landing/profile.html', context) 
     
 

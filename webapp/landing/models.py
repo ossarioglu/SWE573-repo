@@ -12,7 +12,7 @@ class Profile(models.Model):
     creditAmount = models.PositiveIntegerField(editable=True,default=10)
     userDetails = models.TextField(max_length=200,null=True)
     userLocation = models.CharField(max_length=50)
-    userPicture = models.ImageField(upload_to='profile_images', height_field=None, width_field=None, max_length=100)
+    userPicture = models.ImageField(null=True, default="male.png")
     creditInprocess = models.IntegerField(default=0)
     def __str__(self):
         return f'{self.user.username}'
@@ -30,7 +30,7 @@ class Offering(models.Model):
     status = models.CharField(max_length=10,default='New')
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(max_length=100)
-    picture = models.ImageField(upload_to='offer_images', height_field=None, width_field=None, max_length=100, blank=True)
+    picture = models.ImageField(null=True, default="Cat03.jpg")
     serviceInfo = models.TextField(max_length=200,null=True,blank=True)
     startingDate = models.DateTimeField(editable=True,default=today)
     duration = models.PositiveIntegerField(editable=True,default=1)

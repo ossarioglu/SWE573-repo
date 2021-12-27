@@ -44,6 +44,9 @@
                         <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
                         <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
                         <h6>  </h6>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm" href="" role="button">Apply</a>
+                        <h6>  </h6>
                     {% endif %}
                     <span>@ {{ offer_name.providerID}}</span>
                     <p class="text-secondary">

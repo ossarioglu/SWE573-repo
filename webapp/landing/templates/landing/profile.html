@@ -31,61 +31,56 @@
             </div>
         </div>
         <hr>  
-        {% for profile_name in profiles %}
-            {% if request.user == profile_name.user %}
 
-            <span class="profile-details">
 
-                <div>
-                    <h5> Picture: {{profile_name.userPicture}</h5>
-                </div>
+        <span class="profile-details">
 
-                <div>
-                    <h6> Username: {{user.username}}</h6>
-                    <h6> Rating: {{profile_name.userReputation}}</h6>
-                    <h6> Credit: {{profile_name.creditAmount}}</h6>
-                </div>   
-            </span>
-            <hr>
+            <div>           
+                <img src="{{user.profile.userPicture.url}}" class="rounded-circle" width="200" height="200" >
+            </div>
 
-            <span class="profile-details">
-                <div>
-                    <h6> email: {{user.email}}</h6>
-                    <h6> User Type: {{profile_name.userType}}</h6>
-                    <h6> Location: {{profile_name.userLocation}}</h6>
-                    <h6> Credit In Process : {{profile_name.creditInprocess}}</h6>   
-                </div>
+            <div>
+                <h6> Username: {{user.username}}</h6>
+                <h6> Rating: {{user.profile.userReputation}}</h6>
+                <h6> Credit: {{user.profile.creditAmount}}</h6>
+            </div>   
+        </span>
+        <hr>
 
-                <div>
-                    <h6> Details: {{profile_name.userDetails}</h6>
-                </div>
-            </span> 
-            {% endif %}
-        {% endfor %}    
-            
+        <span class="profile-details">
+            <div>
+                <h6> email: {{user.email}}</h6>
+                <h6> User Type: {{user.profile.userType}}</h6>
+                <h6> Location: {{user.profile.userLocation}}</h6>
+                <h6> Credit In Process : {{user.profile.creditInprocess}}</h6>   
+            </div>
+
+            <div>
+                <h6> Details: </h6>
+                <div style="width:300px;height:100px;overflow:auto;">{{user.profile.userDetails}}</div>
+            </div>
+        </span> 
+
+
             <span>
                 <hr>  
                 <h4>Activities</h4>
                 <hr>  
         {% for offer_name in offers %}
+            <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
             {% if request.user == offer_name.providerID %}
-
-                <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
-                {% if request.user == offer_name.providerID %}
-                    <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
-                    <h6>  </h6>
-                {% endif %}
-                <span>@ {{ offer_name.providerID}}</span>
-                <p class="text-secondary">
-                    <h6>on {{ offer_name.startingDate}}</h6>
-                    <h6>for {{ offer_name.duration}} hours</h6>
-                    <h6>at {{ offer_name.location}}</h6>
-                    <small>{{ offer_name.tag}}</small>
-                </p>
-                <hr>    
-
+                <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                <h6>  </h6>
             {% endif %}
+            <span>@ {{ offer_name.providerID}}</span>
+            <p class="text-secondary">
+                <h6>on {{ offer_name.startingDate}}</h6>
+                <h6>for {{ offer_name.duration}} hours</h6>
+                <h6>at {{ offer_name.location}}</h6>
+                <small>{{ offer_name.tag}}</small>
+            </p>
+            <hr>    
         {% endfor %}
             </span>
     </div>
