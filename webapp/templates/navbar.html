@@ -24,13 +24,14 @@
 
  
 
-        {% if request.user.is_authenticated %}  
-        <img src="{{user.profile.userPicture.url}}" class="rounded-circle"  alt={{ request.user }} width="50" height="50">  
+        {% if request.user.is_authenticated %} 
+        <img src="{{user.profile.userPicture.url}}" class="rounded-circle"  alt={{ request.user }} width="50" height="50"> 
             <div class="dropdown">
                 <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ request.user }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="">Credits: {{ user.profile.creditAmount|add:user.profile.creditInprocess }} Ch</a>
                     <a class="dropdown-item" href=" {% url 'user-profile' request.user %}">Profile</a>
                     <a class="dropdown-item" href="#">Actions</a>
                     <a class="dropdown-item" href="#">History</a>
