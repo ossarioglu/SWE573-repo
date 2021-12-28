@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Offering, Tag, Profile
+from .models import Offering, Tag, Profile , Requestservice, Notification
 from .forms import OfferForm
 # My views
 
@@ -134,3 +134,13 @@ def deleteOffer(request, ofNum):
         offer.delete()
         return redirect('home')
     return render(request, 'landing/delete.html', {'obj':offer})
+
+@login_required(login_url='login')
+def requestOffer(request, sID, pID, sType):
+    newrequest = Requestservice.objects.create(serviceID=Offering.objects.get(serviceID=sID), requesterID=request.user, serviceType=sType, status='New')
+    if newrequest:
+        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=pID+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
+        if newnote:
+            return HttpResponse("Request Received")
+    else:
+        return HttpResponse("A problem occured. Please try again later")

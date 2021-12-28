@@ -39,15 +39,13 @@
         <div>        
             {% for offer_name in offers %}
                 <div>
-                    <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
+                    <h5>{{ offer_name.keywords}}</h5>
+                    <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
                     {% if request.user == offer_name.providerID %}
                         <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
                         <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
-                        <h6>  </h6>
-                    {% else %}
-                        <a class="btn btn-primary btn-sm" href="" role="button">Apply</a>
-                        <h6>  </h6>
                     {% endif %}
+                    <h6>  </h6>
                     <span>@ {{ offer_name.providerID}}</span>
                     <p class="text-secondary">
                         <h6>on {{ offer_name.startingDate}}</h6>

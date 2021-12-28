@@ -5,7 +5,11 @@
 <style>
     .offerings-container{
         display: grid;
-        grid-template-columns: 1fr 5fr 1fr; 
+        grid-template-columns: 2fr 5fr 4fr; 
+    }
+    .format-container{
+        display: grid;
+        grid-template-columns: 3fr 5fr 1fr; 
     }
 </style>
 
@@ -15,10 +19,46 @@
         </div>
 
         <div>
-            <h1> {{ offers.keywords }}</h1>
-            <h2> {{ offers.status }}</h2>
-            <h3> {{ offers.serviceInfo }}</h3>
+
+            <span>
+                <div class="format-container">
+                    <div>
+                        <img src="{{offers.picture.url}}" width="150" height="150"> 
+                    </div>
+                    <div>
+                        <h3> {{ offers.keywords }}</h3>
+                        <h7>by</h7>
+                        <h5> @{{ offers.providerID }}</h5>
+                        <h7>at</h7>
+                        <h5> {{ offers.location }} </h5>
+                    </div>
+                    <div>
+
+                        {% if request.user == offers.providerID %}
+                            <a class="btn btn-success btn-sm" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
+                            <h3>  </h3>
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </span>
+            <hr>
+
+            <h4> {{ offers.serviceInfo }}</h4>
+            <h5> {{ offers.duration }} hour(s) {{ offers.meetingType }} event</h5>
+            <h5> on {{ offers.startingDate }}</h5>
+            <h6> with </h6> <h5>{{ offers.capacity }} capacity </h5>
+            <hr>
+            <h6> Recurrance: {{ offers.recurrance }}</h6>
+            <h6> at {{ offers.tag }} category</h6>
+
         </div>
+
+
+
 
         <div>
 

@@ -31,7 +31,8 @@
                     {{ request.user }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="">Credits: {{ user.profile.creditAmount|add:user.profile.creditInprocess }} Ch</a>
+                    <p class="dropdown-item text-primary"> Credits: {{ user.profile.creditAmount|add:user.profile.creditInprocess }} Ch </p>
+                    <hr>
                     <a class="dropdown-item" href=" {% url 'user-profile' request.user %}">Profile</a>
                     <a class="dropdown-item" href="#">Actions</a>
                     <a class="dropdown-item" href="#">History</a>

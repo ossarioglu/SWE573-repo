@@ -5,6 +5,8 @@ import uuid
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+today = timezone.now
+
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     userType = models.CharField(max_length=10)
@@ -16,6 +18,9 @@ class Profile(models.Model):
     creditInprocess = models.IntegerField(default=0)
     def __str__(self):
         return f'{self.user.username}'
+    def updateCredit(self):
+        self.creditAmount += self.creditInprocess
+        return True
 
 # Create your models here.
 class Tag(models.Model):
@@ -24,13 +29,12 @@ class Tag(models.Model):
         return self.tagName
 
 class Offering(models.Model):
-    today = timezone.now
     serviceID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10,default='New')
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
-    keywords = models.CharField(max_length=100)
-    picture = models.ImageField(null=True, default="Cat03.jpg")
+    keywords = models.CharField(editable=True, max_length=100)
+    picture = models.ImageField(null=True)
     serviceInfo = models.TextField(max_length=200,null=True,blank=True)
     startingDate = models.DateTimeField(editable=True,default=today)
     duration = models.PositiveIntegerField(editable=True,default=1)
@@ -48,12 +52,11 @@ class Offering(models.Model):
     def __str__(self):
         return self.keywords
 
-
 class Feedback(models.Model):
     feedbackID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
-    giverID = models.ForeignKey(User, related_name='feedback_give_id', on_delete=models.CASCADE)
-    takerID = models.ForeignKey(User, related_name='feedback_receiver_id', on_delete=models.CASCADE)
+    giverID = models.ForeignKey(User, related_name='feedbackGiverID', on_delete=models.CASCADE)
+    takerID = models.ForeignKey(User, related_name='feedbackReceiverID', on_delete=models.CASCADE)
     comment = models.TextField()
     rating = models.PositiveIntegerField(editable=True,default=1)
     updated = models.DateTimeField(auto_now=True)
@@ -62,3 +65,26 @@ class Feedback(models.Model):
     def __str__(self):
         return self.comment[0:20]
 
+class Requestservice(models.Model):
+    requestID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
+    requesterID = models.ForeignKey(User, on_delete=models.CASCADE)
+    serviceType = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.requestID}'
+
+class Notification(models.Model):
+    noteID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
+    receiverID = models.ForeignKey(User, on_delete=models.CASCADE)
+    noteContent = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.noteID}'

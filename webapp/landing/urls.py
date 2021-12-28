@@ -12,9 +12,11 @@ urlpatterns = [
     path('create-offer/', views.createOffer, name ="create-offer"), 
     path('update-offer/<str:ofNum>/', views.updateOffer, name ="update-offer"), 
     path('delete-offer/<str:ofNum>/', views.deleteOffer, name ="delete-offer"), 
-    path('delete-offer/<str:ofNum>/', views.deleteOffer, name ="delete-offer"), 
-
+    
     path('profile/<str:userKey>/', views.userProfile, name ="user-profile"), 
 
+    path('requests/<str:sID>/<str:pID>/<str:sType>/', views.requestOffer, name ="request-Service"), 
 
 ]
+
+
