@@ -5,11 +5,11 @@
 <style>
     .offerings-container{
         display: grid;
-        grid-template-columns: 2fr 5fr 4fr; 
+        grid-template-columns: 2fr 6fr 4fr; 
     }
     .format-container{
         display: grid;
-        grid-template-columns: 3fr 5fr 1fr; 
+        grid-template-columns: 3fr 5fr 2fr; 
     }
 </style>
 
@@ -38,13 +38,24 @@
                             <a class="btn btn-success btn-sm" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
                             <h3>  </h3>
                             <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
-                        {% else %}
-                            <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
+                        {% else %}  
+                            {% if applications.count ==  0 %}
+                                <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
+                            {% else %}
+                                {% for a in applications %}
+                                    {% if request.user == a.requesterID %}
+                                        <h7> Already applied </h7> 
+                                        <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
+                                    {% else %}
+                                        <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
+                                    {% endif %}
+                                {% endfor %}  
+                            {% endif %}
                         {% endif %}
                     </div>
                     
                 </div>
-            </span>
+            </span> 
             <hr>
 
             <h4> {{ offers.serviceInfo }}</h4>

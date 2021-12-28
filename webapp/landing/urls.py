@@ -16,6 +16,7 @@ urlpatterns = [
     path('profile/<str:userKey>/', views.userProfile, name ="user-profile"), 
 
     path('requests/<str:sID>/<str:pID>/<str:sType>/', views.requestOffer, name ="request-Service"), 
+    path('requests/delete/<str:rID>/', views.deleteRequest, name ="delete-Request"), 
 
 ]
 

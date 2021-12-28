@@ -78,11 +78,12 @@ def home(request):
 
 def offerings(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
+    application = Requestservice.objects.filter(serviceID=ofnum)
 #    offer : None
 #    for i in offers:
 #        if i['id'] == int(ofnum):
 #            offer = i
-    context = {'offers':offer}
+    context = {'offers':offer, "applications":application}
     return render(request, 'landing/offerings.html', context)
 #    return HttpResponse('Offering Page')
 
@@ -141,6 +142,20 @@ def requestOffer(request, sID, pID, sType):
     if newrequest:
         newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=pID+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
         if newnote:
-            return HttpResponse("Request Received")
+            application = Requestservice.objects.filter(serviceID=sID)
+            context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+            return render(request, 'landing/offerings.html', context)
     else:
         return HttpResponse("A problem occured. Please try again later")
+
+@login_required(login_url='login')
+def deleteRequest(request, rID):
+    reqSrvs = Requestservice.objects.get(requestID=rID)
+    if request.user != reqSrvs.requesterID:
+        return HttpResponse('You are not allowed to delete this offer')
+
+    if request.method == 'POST':
+        reqSrvs.delete()
+        return redirect('home')
+    return render(request, 'landing/cancelRequest.html', {'obj':reqSrvs})
+
