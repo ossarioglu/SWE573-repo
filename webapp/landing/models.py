@@ -21,6 +21,9 @@ class Profile(models.Model):
     def updateCredit(self):
         self.creditAmount += self.creditInprocess
         return True
+    def blockCredit(self, amount):
+        self.creditInprocess += amount
+
 
 # Create your models here.
 class Tag(models.Model):

@@ -140,6 +140,15 @@ def deleteOffer(request, ofNum):
 def requestOffer(request, sID, pID, sType):
     newrequest = Requestservice.objects.create(serviceID=Offering.objects.get(serviceID=sID), requesterID=request.user, serviceType=sType, status='New')
     if newrequest:
+        offer = Offering.objects.get(serviceID=sID)
+        blkQnt = offer.duration
+        request.user.profile.blockCredit(-blkQnt)
+        request.user.profile.save()
+
+        providerUser = User.objects.get(username=pID)
+        providerUser.profile.blockCredit(blkQnt)
+        providerUser.profile.save()
+
         newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=pID+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
         if newnote:
             application = Requestservice.objects.filter(serviceID=sID)
@@ -149,13 +158,21 @@ def requestOffer(request, sID, pID, sType):
         return HttpResponse("A problem occured. Please try again later")
 
 @login_required(login_url='login')
-def deleteRequest(request, rID):
+def deleteRequest(request, rID, pID, sID):
     reqSrvs = Requestservice.objects.get(requestID=rID)
+    providerUser = User.objects.get(username=pID)
+    offer = Offering.objects.get(serviceID=sID)
+    blkQnt= offer.duration
+
+    requestingUser = request.user
+
+    context = {'obj':reqSrvs, 'providerUser':providerUser,'requestingUser':requestingUser, 'blockedQnt':blkQnt}
+
     if request.user != reqSrvs.requesterID:
         return HttpResponse('You are not allowed to delete this offer')
 
     if request.method == 'POST':
         reqSrvs.delete()
         return redirect('home')
-    return render(request, 'landing/cancelRequest.html', {'obj':reqSrvs})
+    return render(request, 'landing/cancelRequest.html', context)
 

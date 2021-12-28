@@ -18,10 +18,23 @@
             <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
             <input type="submit" value="Confirm" />
         </form>
+
     </div>
     <div></div>
 
 </div>
+
+        {%      
+            
+        requestingUser.user.profile.blockCredit(blockedQnt)
+        request.user.profile.save()
+
+        providerUser.profile.blockCredit(-blockedQnt)
+        providerUser.profile.save()
+            
+            
+            %}
+
 
 
 

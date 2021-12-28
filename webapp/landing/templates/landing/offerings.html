@@ -45,7 +45,7 @@
                                 {% for a in applications %}
                                     {% if request.user == a.requesterID %}
                                         <h7> Already applied </h7> 
-                                        <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID offers.providerID offers.serviceID %}" role="button">Cancel</a>
                                     {% else %}
                                         <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
                                     {% endif %}
