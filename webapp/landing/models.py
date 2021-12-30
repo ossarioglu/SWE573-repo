@@ -37,7 +37,7 @@ class Offering(models.Model):
     status = models.CharField(max_length=10,default='New')
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(editable=True, max_length=100)
-    picture = models.ImageField(null=True)
+    picture = models.ImageField(null=True, default="Cat03.png")
     serviceInfo = models.TextField(max_length=200,null=True,blank=True)
     startingDate = models.DateTimeField(editable=True,default=today)
     duration = models.PositiveIntegerField(editable=True,default=1)

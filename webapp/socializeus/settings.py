@@ -78,6 +78,8 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+
 """
 
 

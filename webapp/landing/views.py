@@ -70,10 +70,11 @@ def home(request):
     )
 
     tags = Tag.objects.all()
+    users = User.objects.all()
     offer_count = offers.count()
 
 
-    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count}
+    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users}
     return render(request, 'landing/home.html', context)
 
 def offerings(request, ofnum):

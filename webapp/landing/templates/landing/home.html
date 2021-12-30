@@ -16,7 +16,7 @@
     </div>
 
     <div>
-        <h1> Offerings @ socializeUS </h1>
+        <h5> Categories </h5>
         <hr>
         
         <div>
@@ -31,8 +31,9 @@
     </div>
 
     <div>
+        <h3> Listed Offerings </h3>
         <h5>{{ offer_count }} offerings available </h5>
-        <h1> Listed Offerings </h1>
+
         <a href="{% url 'create-offer' %}" > New Offer </a>
         <hr>
     
@@ -46,7 +47,9 @@
                         <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
                     {% endif %}
                     <h6>  </h6>
-                    <span>@ {{ offer_name.providerID}}</span>
+                    <span>
+                        @{{ offer_name.providerID}}
+                    </span>
                     <p class="text-secondary">
                         <h6>on {{ offer_name.startingDate}}</h6>
                         <h6>for {{ offer_name.duration}} hours</h6>
