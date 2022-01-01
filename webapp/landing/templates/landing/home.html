@@ -7,6 +7,10 @@
         display: grid;
         grid-template-columns: 1fr 5fr 20fr; 
     }
+    .offer-container{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; 
+    }
 
 </style>
 
@@ -39,25 +43,35 @@
     
         <div>        
             {% for offer_name in offers %}
-                <div>
-                    <h5>{{ offer_name.keywords}}</h5>
-                    <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
-                    {% if request.user == offer_name.providerID %}
-                        <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
-                        <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
-                    {% endif %}
-                    <h6>  </h6>
-                    <span>
-                        @{{ offer_name.providerID}}
-                    </span>
-                    <p class="text-secondary">
-                        <h6>on {{ offer_name.startingDate}}</h6>
-                        <h6>for {{ offer_name.duration}} hours</h6>
-                        <h6>at {{ offer_name.location}}</h6>
-                        <small>{{ offer_name.tag}}</small>
-                    </p>
-                    <hr>
+                <div class="offer-container">
+                    <div>
+                        <h5>{{ offer_name.keywords}}</h5>
+                        <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
+                        {% if request.user == offer_name.providerID %}
+                            <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                        {% endif %}
+                        <h6>  </h6>
+                        <span>
+                            @{{ offer_name.providerID}}
+                        </span>
+                        <p class="text-secondary">
+                            <h6>on {{ offer_name.startingDate}}</h6>
+                            <h6>for {{ offer_name.duration}} hours</h6>
+                            <h6>at {{ offer_name.location}}</h6>
+                            <small>{{ offer_name.tag}}</small>
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{{offer_name.picture.url}}" width="200" height="200" >
+                    </div>
+
+                    <div></div>
+                    
                 </div>
+                <hr>
+
             {% endfor %}
         </div>
     </div>
