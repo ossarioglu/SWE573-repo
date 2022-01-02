@@ -53,11 +53,11 @@ class Offering(models.Model):
         ordering = ['-updated','-created']
 
     def __str__(self):
-        return self.keywords
+        return f'{self.serviceID}'
 
 class Feedback(models.Model):
     feedbackID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
-    serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
+    serviceID = models.ForeignKey(Offering,related_name='feedbackForService', on_delete=models.CASCADE)
     giverID = models.ForeignKey(User, related_name='feedbackGiverID', on_delete=models.CASCADE)
     takerID = models.ForeignKey(User, related_name='feedbackReceiverID', on_delete=models.CASCADE)
     comment = models.TextField()
@@ -66,7 +66,7 @@ class Feedback(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.comment[0:20]
+        return f'{self.feedbackID}'
 
 class Requestservice(models.Model):
     requestID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
@@ -83,7 +83,7 @@ class Requestservice(models.Model):
 class Notification(models.Model):
     noteID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
-    receiverID = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiverID = models.ForeignKey(User, related_name='receiverID', on_delete=models.CASCADE)
     noteContent = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     updated = models.DateTimeField(auto_now=True)
@@ -103,4 +103,4 @@ class Assignment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.requestID}'
+        return f'{self.assignID}'

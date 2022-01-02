@@ -28,7 +28,7 @@
         <button type="button" class="btn btn-white position-relative">
             <img src="{{user.profile.userPicture.url}}" class="rounded-circle position-relative"  alt={{ request.user }} width="50" height="50"> 
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{user.notification.count}}
+                {{request.user.receiverID.count }}
               <span class="visually-hidden">unread messages</span>
             </span>
         </button>
@@ -40,8 +40,8 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <p class="dropdown-item text-primary"> Credits: {{ user.profile.creditAmount|add:user.profile.creditInprocess }} Ch </p>
                     <hr>
-                    <a class="dropdown-item" href=" {% url 'user-profile' request.user %}">Profile</a>
-                    <a class="dropdown-item" href="#">Actions</a>
+                    <a class="dropdown-item" href="{% url 'user-profile' request.user %}">Profile</a>
+                    <a class="dropdown-item" href="{% url 'handshake' %}">Actions</a>
                     <a class="dropdown-item" href="#">History</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>

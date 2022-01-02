@@ -1,0 +1,127 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .offerings-container{
+        display: grid;
+        grid-template-columns: 2fr 6fr 4fr; 
+    }
+    .format-container{
+        display: grid;
+        grid-template-columns: 3fr 3fr 5fr; 
+    }
+    .applications-container{
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr 2fr; 
+    }
+</style>
+ 
+
+{% if providedAssignments.count > 0 %}
+    </span> 
+        <hr>
+        <h4> Offered Services </h4>
+        <hr>
+    <span>
+
+    {% for myAssign in providedAssignments %}
+
+        <div class="offerings-container">
+            <div>
+
+            </div>
+
+            <div>
+
+                <span>
+                    <div class="format-container">
+                        <div>
+                            <img src="{{myAssign.requestID.serviceID.picture.url}}" width="150" height="150"> 
+                        </div>
+                        <div>
+                            <h3> {{ myAssign.requestID.serviceID.keywords }}</h3>
+                            <h7>by</h7>
+                            <h5> @{{ myAssign.requestID.serviceID.providerID }}</h5>
+                            <h7>at</h7>
+                            <h5> {{ myAssign.requestID.serviceID.location }} </h5>
+                        </div>
+                        <div>
+                            <h4> {{ myAssign.requestID.serviceID.serviceInfo }}</h4>
+                            <h5> {{ myAssign.requestID.serviceID.duration }} hour(s) {{ myAssign.requestID.serviceID.meetingType }} event</h5>
+                            <h5> on {{ myAssign.requestID.serviceID.startingDate }}</h5>
+                            <h6> with </h6> <h5>{{ myAssign.requestID.serviceID.capacity }} capacity </h5>
+                            <hr>
+                            <h6> Recurrance: {{ myAssign.requestID.serviceID.recurrance }}</h6>
+                            <h6> at {{ myAssign.requestID.serviceID.tag }} category</h6>
+                            <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
+                        </div>
+                    </div>
+                </span> 
+                <hr>
+
+            </div>
+
+            <div>
+
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+{% if receivedAssignments.count > 0 %}
+    </span> 
+        <hr>
+        <h4> Received Services </h4>
+        <hr>
+    <span>
+
+    {% for myAssign in receivedAssignments %}
+
+        <div class="offerings-container">
+            <div>
+
+            </div>
+
+            <div>
+
+                <span>
+                    <div class="format-container">
+                        <div>
+                            <img src="{{myAssign.requestID.serviceID.picture.url}}" width="150" height="150"> 
+                        </div>
+                        <div>
+                            <h3> {{ myAssign.requestID.serviceID.keywords }}</h3>
+                            <h7>by</h7>
+                            <h5> @{{ myAssign.requestID.serviceID.providerID }}</h5>
+                            <h7>at</h7>
+                            <h5> {{ myAssign.requestID.serviceID.location }} </h5>
+                        </div>
+                        <div>
+                            <h4> {{ myAssign.requestID.serviceID.serviceInfo }}</h4>
+                            <h5> {{ myAssign.requestID.serviceID.duration }} hour(s) {{ myAssign.requestID.serviceID.meetingType }} event</h5>
+                            <h5> on {{ myAssign.requestID.serviceID.startingDate }}</h5>
+                            <h6> with </h6> <h5>{{ myAssign.requestID.serviceID.capacity }} capacity </h5>
+                            <hr>
+                            <h6> Recurrance: {{ myAssign.requestID.serviceID.recurrance }}</h6>
+                            <h6> at {{ myAssign.requestID.serviceID.tag }} category</h6>
+                            <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
+                        </div>
+                    </div>
+                </span> 
+                <hr>
+
+            </div>
+
+            <div>
+
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+{% endblock content %}

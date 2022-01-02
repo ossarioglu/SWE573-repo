@@ -21,6 +21,10 @@ urlpatterns = [
     path('assignment/<str:ofnum>/', views.assigning, name ="assign"), 
     path('assignment/<str:sID>/<str:rID>/<str:uID>/<str:sType>/', views.assignService, name ="assign-Service"), 
 
+    path('handshake/', views.handshaking, name ="handshake"), 
+    path('confirm/<str:asNum>/', views.confirmation, name ="confirmService"), 
+
+
 ]
 
 

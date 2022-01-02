@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Offering, Tag, Profile , Requestservice, Notification, Assignment
+from .models import Feedback, Offering, Tag, Profile , Requestservice, Notification, Assignment
 from .forms import OfferForm
 # My views
 
@@ -197,3 +197,51 @@ def assignService(request,sID, rID, uID, sType):
             return render(request, 'landing/assignment.html', context)
     else:
         return HttpResponse("A problem occured. Please try again later")
+
+def handshaking(request):
+    providedAssignment = Assignment.objects.filter(approverID=request.user)
+    receivedAssignment = Assignment.objects.filter(requesterID=request.user)
+
+    context = {'providedAssignments':providedAssignment, "receivedAssignments":receivedAssignment}
+    return render(request, 'landing/handshake.html', context)
+#    return HttpResponse('Offering Page')
+
+def confirmation(request, asNum):
+    myAssignment = Assignment.objects.get(assignID=asNum)
+
+    if request.method == 'POST':
+        pID = request.user
+        if myAssignment.requestID.serviceID.providerID == request.user:
+            rID = myAssignment.requestID.requesterID
+            if myAssignment.status == 'Open':
+                aStatus = "Confirmed by provider"
+            elif myAssignment.status == 'Confirmed by receiver':
+                aStatus = "Closed"
+        else:
+            rID = myAssignment.requestID.serviceID.providerID
+            if myAssignment.status == 'Open':
+                aStatus = "Confirmed by receiver"
+            elif myAssignment.status == 'Confirmed by provider':
+                aStatus = "Closed"
+        
+        feedback = Feedback.objects.create(
+            serviceID=myAssignment.requestID.serviceID, 
+            giverID=pID, 
+            takerID=rID, 
+            comment= request.POST.get('offerComment'),
+            rating=request.POST.get('sRate')
+            )
+        if feedback:
+            myAssignment.status=aStatus
+            myAssignment.save()
+            Notification.objects.create(
+                serviceID=myAssignment.requestID.serviceID, 
+                receiverID=rID, 
+                noteContent=request.user.username+ ' confirmed that service has happened for ' + myAssignment.requestID.serviceID.keywords , status='Unread')
+  
+        return redirect('confirmService', asNum = myAssignment.assignID )
+
+    myFeedback = Feedback.objects.filter(serviceID=myAssignment.requestID.serviceID).order_by('-created')
+
+    context = {'myAssignment':myAssignment, 'myFeedbacks':myFeedback }
+    return render(request, 'landing/confirm.html', context)

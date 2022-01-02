@@ -1,0 +1,135 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .offerings-container{
+        display: grid;
+        grid-template-columns: 2fr 6fr 4fr; 
+    }
+    .format-container{
+        display: grid;
+        grid-template-columns: 3fr 3fr 5fr; 
+    }
+    .feedback-container{
+        display: grid;
+        grid-template-columns: 2fr 5fr 1fr; 
+    }
+</style>
+
+<div class="offerings-container">
+
+        <div>
+
+        </div>
+
+        <div>
+
+            <span>
+                <div class="format-container">
+                    <div>
+                        <img src="{{myAssignment.requestID.serviceID.picture.url}}" width="150" height="150"> 
+                    </div>
+                    <div>
+                        <h3> {{ myAssignment.requestID.serviceID.keywords }}</h3>
+                        <h7>by</h7>
+                        <h5> @{{ myAssignment.requestID.serviceID.providerID }}</h5>
+                        <h7>to</h7>
+                        {% if myAssignment.requestID.serviceID.providerID == request.user %}
+                            <h5> @{{ myAssignment.requestID.requesterID }}</h5>
+                        {% else %}
+                            <h5> @{{ request.user }}</h5>
+                        {% endif%}
+                    </div>
+                    <div>
+
+                        <h4> {{ myAssignment.requestID.serviceID.serviceInfo }}</h4>
+                        <h5> {{ myAssignment.requestID.serviceID.duration }} hour(s) {{ myAssignment.requestID.serviceID.meetingType }} event</h5>
+                        <h5> on {{ myAssignment.requestID.serviceID.startingDate }}</h5>
+                        <h7>at</h7>
+                        <h5> {{ myAssignment.requestID.serviceID.location }} </h5>                        
+                        <hr>
+                        <h6> Status: {{ myAssignment.status }}</h6>            
+                    </div>
+                </div>
+            </span> 
+
+            {% if myAssignment.status == 'Open' %}
+                <span>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="feedback-container">
+                        <div>
+                            <label for="sRate">Rating:</label>
+                            <select class="form-control" name="sRate">
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="offerComment">Comment on Service</label>
+                            <textarea class="form-control" name="offerComment" rows="1" placeholder="Please enter your comment on service"></textarea>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-success" type="submit">Confirm</button>
+                        </div>
+                    </div>
+
+                </form>
+
+                </span>
+            {% else %}
+
+                {% for feeds in myFeedbacks %}
+                    <span>
+                        <h5>  {{feeds.comment}} by {{feeds.giverID}} </h5> 
+                        <h5>  {{feeds.created|timesince}} ago </h5> 
+                    </span>
+                    <hr>
+                    {% if myAssignment.status != 'Closed' %}
+                        {% if feeds.giverID != request.user %}
+                            <span>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="feedback-container">
+                                        <div>
+                                            <label for="sRate">Rating:</label>
+                                            <select class="form-control" name="sRate">
+                                                <option value=1>1</option>
+                                                <option value=2>2</option>
+                                                <option value=3>3</option>
+                                                <option value=4>4</option>
+                                                <option value=5>5</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="offerComment">Comment on Service</label>
+                                            <textarea class="form-control" name="offerComment" rows="1" placeholder="Please enter your comment on service"></textarea>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-outline-success" type="submit">Confirm</button>
+                                        </div>
+                                    </div>
+                
+                                </form>
+                
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            <hr>
+
+        </div>
+
+        <div>
+
+        </div>
+</div>
+
+
+{% endblock content %}
