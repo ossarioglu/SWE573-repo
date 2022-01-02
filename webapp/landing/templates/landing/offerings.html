@@ -38,7 +38,10 @@
                             <a class="btn btn-success btn-sm" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
                             <h3>  </h3>
                             <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
-                        {% else %}  
+                            <h3>  </h3>
+                            <a class="btn btn-primary btn-sm" href="{% url 'assign' offers.serviceID %}" role="button">Assign</a>
+                     
+                            {% else %}  
                             {% if applications.count ==  0 %}
                                 <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID offers.providerID 'offering' %}" role="button">Apply</a>
                             {% else %}

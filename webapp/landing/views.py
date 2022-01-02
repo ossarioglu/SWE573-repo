@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Offering, Tag, Profile , Requestservice, Notification
+from .models import Offering, Tag, Profile , Requestservice, Notification, Assignment
 from .forms import OfferForm
 # My views
 
@@ -150,7 +150,7 @@ def requestOffer(request, sID, pID, sType):
         providerUser.profile.blockCredit(blkQnt)
         providerUser.profile.save()
 
-        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=pID+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
+        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=request.user.username+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
         if newnote:
             application = Requestservice.objects.filter(serviceID=sID)
             context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
@@ -177,3 +177,23 @@ def deleteRequest(request, rID, pID, sID):
         return redirect('home')
     return render(request, 'landing/cancelRequest.html', context)
 
+def assigning(request, ofnum):
+    offer = Offering.objects.get(serviceID=ofnum)
+    application = Requestservice.objects.filter(serviceID=ofnum)
+
+    context = {'offers':offer, 'applications':application}
+    return render(request, 'landing/assignment.html', context)
+#    return HttpResponse('Offering Page')
+
+@login_required(login_url='login')
+def assignService(request,sID, rID, uID, sType):
+    newassignment = Assignment.objects.create(requestID=Requestservice.objects.get(requestID=rID), approverID=User.objects.get(username=request.user), requesterID=User.objects.get(username=uID), serviceType=sType, status="Open")    
+    if newassignment:
+        # inprogress credit
+        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=uID), noteContent=request.user.username+' approved your request for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
+        if newnote:
+            application = Requestservice.objects.filter(serviceID=sID)
+            context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+            return render(request, 'landing/assignment.html', context)
+    else:
+        return HttpResponse("A problem occured. Please try again later")

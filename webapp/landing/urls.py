@@ -18,6 +18,9 @@ urlpatterns = [
     path('requests/<str:sID>/<str:pID>/<str:sType>/', views.requestOffer, name ="request-Service"), 
     path('requests/delete/<str:rID>/<str:pID>/<str:sID>/', views.deleteRequest, name ="delete-Request"), 
 
+    path('assignment/<str:ofnum>/', views.assigning, name ="assign"), 
+    path('assignment/<str:sID>/<str:rID>/<str:uID>/<str:sType>/', views.assignService, name ="assign-Service"), 
+
 ]
 
 

@@ -91,3 +91,16 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.noteID}'
+
+class Assignment(models.Model):
+    assignID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    requestID = models.ForeignKey(Requestservice, on_delete=models.CASCADE)
+    approverID = models.ForeignKey(User, related_name='approverForAssignementID',  on_delete=models.CASCADE)
+    requesterID = models.ForeignKey(User, related_name='requesterForAssignementID',  on_delete=models.CASCADE)
+    serviceType = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.requestID}'

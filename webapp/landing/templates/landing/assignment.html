@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .offerings-container{
+        display: grid;
+        grid-template-columns: 2fr 6fr 4fr; 
+    }
+    .format-container{
+        display: grid;
+        grid-template-columns: 3fr 3fr 5fr; 
+    }
+    .applications-container{
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr 2fr; 
+    }
+</style>
+
+<div class="offerings-container">
+        <div>
+
+        </div>
+
+        <div>
+
+            <span>
+                <div class="format-container">
+                    <div>
+                        <img src="{{offers.picture.url}}" width="150" height="150"> 
+                    </div>
+                    <div>
+                        <h3> {{ offers.keywords }}</h3>
+                        <h7>by</h7>
+                        <h5> @{{ offers.providerID }}</h5>
+                        <h7>at</h7>
+                        <h5> {{ offers.location }} </h5>
+                    </div>
+                    <div>
+                        <h4> {{ offers.serviceInfo }}</h4>
+                        <h5> {{ offers.duration }} hour(s) {{ offers.meetingType }} event</h5>
+                        <h5> on {{ offers.startingDate }}</h5>
+                        <h6> with </h6> <h5>{{ offers.capacity }} capacity </h5>
+                        <hr>
+                        <h6> Recurrance: {{ offers.recurrance }}</h6>
+                        <h6> at {{ offers.tag }} category</h6>
+                    </div>
+                </div>
+            </span> 
+            <hr>
+            <h4> Applications for {{ offers.keywords }}</h4>
+            <hr>
+            <span>
+                {% for myapp in applications %}
+                    <span>
+                    <div class="applications-container">
+                        <div>
+                            <img src="{{myapp.requesterID.profile.userPicture.url}}" class="rounded-circle position-relative" width="25" height="25"> 
+                        </div>
+                        <div>
+                            <h5> {{ myapp.requesterID }} </h5>
+                        </div>
+                        <div>
+                            <h5> {{ myapp.requesterID.profile.userReputation }}</h5>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="{% url 'assign-Service' offers.serviceID myapp.requestID  myapp.requesterID 'offering' %}" role="button">Assign</a>
+                        </div>
+                    </div>
+                    </span>
+                {% endfor %}
+            </span>
+            <hr>
+
+        </div>
+
+
+
+
+        <div>
+
+        </div>
+</div>
+
+
+{% endblock content %}
