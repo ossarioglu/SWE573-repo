@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .notes-container{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr; 
+    }
+    .format-container{
+        display: grid;
+        grid-template-columns: 5fr 3fr 3fr; 
+    }
+</style>
+
+
+<div class="notes-container">
+        <div>
+
+        </div>
+
+        <div>
+            {% for note in myNotes %}
+                <span>
+                    <div class="format-container">
+                        <div>
+                            <h7> {{ note.noteContent }}</h7>
+                        </div>
+                        <div>
+                            <a class="btn btn-outline-success" href="{% url 'offerings' note.serviceID %}" role="button">Go to Service</a>
+                        </div>
+                        <div>
+                            {% if note.status == 'Read' %}
+                                <a class="btn btn-outline-primary" href="{% url 'changeNote' note.noteID %}" role="button">Status : Read</a>  
+                            {% else %}
+                                <a class="btn btn-outline-success" href="{% url 'changeNote' note.noteID %}" role="button">Status : UnRead</a>  
+                            {% endif %} 
+                        </div>
+                        
+                    </div>
+                </span> 
+            {% endfor %}
+
+            <hr>
+        </div>
+
+        <div>
+        </div>
+</div>
+
+
+{% endblock content %}

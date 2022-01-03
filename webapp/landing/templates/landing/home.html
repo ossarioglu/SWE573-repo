@@ -43,6 +43,7 @@
     
         <div>        
             {% for offer_name in offers %}
+            {% if offer_name.status == 'New' %}
                 <div class="offer-container">
                     <div>
                         <h5>{{ offer_name.keywords}}</h5>
@@ -71,7 +72,7 @@
                     
                 </div>
                 <hr>
-
+            {% endif %}
             {% endfor %}
         </div>
     </div>

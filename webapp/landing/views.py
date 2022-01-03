@@ -71,10 +71,13 @@ def home(request):
 
     tags = Tag.objects.all()
     users = User.objects.all()
-    offer_count = offers.count()
+    offer_count = offers.filter(status='New').count()
+    if request.user.is_authenticated:
+        unreadNote = request.user.receiverID.filter(status='Unread').count
+    else:
+        unreadNote = ""
 
-
-    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users}
+    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users, 'notes':unreadNote}
     return render(request, 'landing/home.html', context)
 
 def offerings(request, ofnum):
@@ -190,6 +193,9 @@ def assignService(request,sID, rID, uID, sType):
     newassignment = Assignment.objects.create(requestID=Requestservice.objects.get(requestID=rID), approverID=User.objects.get(username=request.user), requesterID=User.objects.get(username=uID), serviceType=sType, status="Open")    
     if newassignment:
         # inprogress credit
+        newassignment.requestID.serviceID.status = 'Assigned'
+        newassignment.save()
+
         newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=uID), noteContent=request.user.username+' approved your request for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
         if newnote:
             application = Requestservice.objects.filter(serviceID=sID)
@@ -234,6 +240,9 @@ def confirmation(request, asNum):
         if feedback:
             myAssignment.status=aStatus
             myAssignment.save()
+            if aStatus == "Closed":
+                myAssignment.requestID.serviceID.status = 'Closed'
+
             Notification.objects.create(
                 serviceID=myAssignment.requestID.serviceID, 
                 receiverID=rID, 
@@ -245,3 +254,21 @@ def confirmation(request, asNum):
 
     context = {'myAssignment':myAssignment, 'myFeedbacks':myFeedback }
     return render(request, 'landing/confirm.html', context)
+
+def notifications(request):
+    myNotes = request.user.receiverID.filter()
+    context = {'myNotes':myNotes }
+    return render(request, 'landing/notification.html', context)
+
+def changeNote(request, nID):
+    myNotes = request.user.receiverID.filter()
+    myNote = Notification.objects.get(noteID=nID)
+    
+    if myNote.status == "Read":
+        myNote.status = "Unread"
+    else:
+        myNote.status = "Read"
+    myNote.save()
+
+    context = {'myNotes':myNotes }
+    return render(request, 'landing/notification.html', context)

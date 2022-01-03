@@ -25,13 +25,14 @@
  
 
         {% if request.user.is_authenticated %} 
-        <button type="button" class="btn btn-white position-relative">
+
+        <a class="btn btn-white btn-sm position-relative" href="{% url 'notifications' %}" role="button">
             <img src="{{user.profile.userPicture.url}}" class="rounded-circle position-relative"  alt={{ request.user }} width="50" height="50"> 
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{request.user.receiverID.count }}
+                {{ notes }}
               <span class="visually-hidden">unread messages</span>
             </span>
-        </button>
+        </a>
 
             <div class="dropdown">
                 <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

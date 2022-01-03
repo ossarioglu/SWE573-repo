@@ -14,7 +14,7 @@ class Profile(models.Model):
     creditAmount = models.PositiveIntegerField(editable=True,default=10)
     userDetails = models.TextField(max_length=200,null=True)
     userLocation = models.CharField(max_length=50)
-    userPicture = models.ImageField(null=True, default="male.png")
+    userPicture = models.ImageField(upload_to='Profiles',null=True, default="male.png")
     creditInprocess = models.IntegerField(default=0)
     def __str__(self):
         return f'{self.user.username}'
@@ -37,7 +37,7 @@ class Offering(models.Model):
     status = models.CharField(max_length=10,default='New')
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(editable=True, max_length=100)
-    picture = models.ImageField(null=True, default="Cat03.png")
+    picture = models.ImageField(upload_to='Services', null=True, default="Cat03.png")
     serviceInfo = models.TextField(max_length=200,null=True,blank=True)
     startingDate = models.DateTimeField(editable=True,default=today)
     duration = models.PositiveIntegerField(editable=True,default=1)
@@ -46,6 +46,7 @@ class Offering(models.Model):
     capacity = models.PositiveIntegerField(editable=True,default=1)
     recurrance = models.PositiveIntegerField(editable=True,default=1)
     deadlineForUpdate = models.DateTimeField(editable=True,default=today)
+    status = models.CharField(max_length=100,default='New')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

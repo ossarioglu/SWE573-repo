@@ -24,6 +24,8 @@ urlpatterns = [
     path('handshake/', views.handshaking, name ="handshake"), 
     path('confirm/<str:asNum>/', views.confirmation, name ="confirmService"), 
 
+    path('notification/', views.notifications, name ="notifications"), 
+    path('notification/<str:nID>/', views.changeNote, name ="changeNote"), 
 
 ]
 
