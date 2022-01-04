@@ -47,9 +47,21 @@ class Offering(models.Model):
         ("Closed", "Closed"),
         ("Assigned", "Assigned"),
     ]
+
+    SERVICE_TYPE = [
+        ("Offering", "Offering"),
+        ("Event", "Event"),
+    ]
+
+    RECURRENCE_PERIOD = [
+        ("None", "None"),
+        ("Weekly", "Weekly"),        
+        ("Monthly", "Monthly"),
+    ]
+
     serviceID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=10,default='New')
+    status = models.CharField(max_length=10,choices=SERVICE_STATUS, default='New', editable = False)
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(editable=True, max_length=100)
     picture = models.ImageField(upload_to='Services', null=True, default="Cat03.png")
@@ -60,8 +72,9 @@ class Offering(models.Model):
     location = models.CharField(max_length=50)
     capacity = models.PositiveIntegerField(editable=True,default=1)
     recurrance = models.PositiveIntegerField(editable=True,default=1)
+    recurrancePeriod = models.CharField(max_length=100,choices=RECURRENCE_PERIOD, default='None')
     deadlineForUpdate = models.DateTimeField(editable=True,default=today)
-    status = models.CharField(max_length=100,choices=SERVICE_STATUS, default='New')
+    serviceType = models.CharField(max_length=100,choices=SERVICE_TYPE, default='Offering')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -93,9 +106,11 @@ class Feedback(models.Model):
 
 class Requestservice(models.Model):
     REQUEST_STATUS = [
-        ("Unread", "Unread"),
-        ("Read", "Read"),
+        ("Inprocess", "Inprocess"),
+        ("Accepted", "Accepted"),
+        ("Rejected", "Rejected"),
     ]
+
     requestID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     serviceID = models.ForeignKey(Offering, on_delete=models.CASCADE)
     requesterID = models.ForeignKey(User, on_delete=models.CASCADE)

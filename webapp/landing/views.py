@@ -141,32 +141,37 @@ def deleteOffer(request, ofNum):
     return render(request, 'landing/delete.html', {'obj':offer})
 
 @login_required(login_url='login')
-def requestOffer(request, sID, pID, sType):
-    newrequest = Requestservice.objects.create(serviceID=Offering.objects.get(serviceID=sID), requesterID=request.user, serviceType=sType, status='New')
-    if newrequest:
-        offer = Offering.objects.get(serviceID=sID)
-        blkQnt = offer.duration
-        request.user.profile.blockCredit(-blkQnt)
-        request.user.profile.save()
+def requestOffer(request, sID):
+    offer = Offering.objects.get(serviceID=sID)
 
-        providerUser = User.objects.get(username=pID)
-        providerUser.profile.blockCredit(blkQnt)
-        providerUser.profile.save()
+    if not Requestservice.objects.filter(serviceID=offer).filter(requesterID=request.user).exists():
+        newrequest = Requestservice.objects.create(serviceID=offer, requesterID=request.user, serviceType=offer.serviceType, status='Inprocess')
+        if newrequest:
+            blkQnt = offer.duration
+            request.user.profile.blockCredit(-blkQnt)
+            request.user.profile.save()
 
-        newnote = Notification.objects.create(
-            serviceID=Offering.objects.get(serviceID=sID), 
-            receiverID=User.objects.get(username=pID), 
-            noteContent=request.user.username+' applied for ' 
-                        + Offering.objects.get(serviceID=sID).keywords,
-                        status='Unread'
-            )
-                    
-        if newnote:
-            application = Requestservice.objects.filter(serviceID=sID)
-            context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
-            return render(request, 'landing/offerings.html', context)
+            offer.providerID.profile.blockCredit(blkQnt)
+            offer.providerID.profile.save()
+
+            newnote = Notification.objects.create(
+                serviceID=offer, 
+                receiverID=offer.providerID, 
+                noteContent=request.user.username+' applied for ' 
+                            + offer.keywords,
+                            status='Unread'
+                )
+                        
+            if newnote:
+                application = Requestservice.objects.filter(serviceID=sID)
+                context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+                return render(request, 'landing/offerings.html', context)
+        else:
+            return HttpResponse("A problem occured. Please try again later")
     else:
-        return HttpResponse("A problem occured. Please try again later")
+        application = Requestservice.objects.filter(serviceID=sID)
+        context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+        return render(request, 'landing/offerings.html', context)
 
 @login_required(login_url='login')
 def deleteRequest(request, rID, pID, sID):
