@@ -153,7 +153,14 @@ def requestOffer(request, sID, pID, sType):
         providerUser.profile.blockCredit(blkQnt)
         providerUser.profile.save()
 
-        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=pID), noteContent=request.user.username+' applied for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
+        newnote = Notification.objects.create(
+            serviceID=Offering.objects.get(serviceID=sID), 
+            receiverID=User.objects.get(username=pID), 
+            noteContent=request.user.username+' applied for ' 
+                        + Offering.objects.get(serviceID=sID).keywords,
+                        status='Unread'
+            )
+                    
         if newnote:
             application = Requestservice.objects.filter(serviceID=sID)
             context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
@@ -196,7 +203,14 @@ def assignService(request,sID, rID, uID, sType):
         newassignment.requestID.serviceID.status = 'Assigned'
         newassignment.save()
 
-        newnote = Notification.objects.create(serviceID=Offering.objects.get(serviceID=sID), receiverID=User.objects.get(username=uID), noteContent=request.user.username+' approved your request for '+f'{Offering.objects.get(serviceID=sID)}', status='Unread')
+        newnote = Notification.objects.create(
+            serviceID=Offering.objects.get(serviceID=sID), 
+            receiverID=User.objects.get(username=uID), 
+            noteContent=request.user.username
+                        +' approved your request for '
+                        + Offering.objects.get(serviceID=sID).keywords, 
+                        status='Unread'
+                )
         if newnote:
             application = Requestservice.objects.filter(serviceID=sID)
             context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
