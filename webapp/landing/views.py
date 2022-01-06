@@ -82,7 +82,7 @@ def home(request):
 
 def offerings(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
-    application = Requestservice.objects.filter(serviceID=ofnum)
+    application = Requestservice.objects.filter(serviceID=ofnum).filter(requesterID=request.user)
 #    offer : None
 #    for i in offers:
 #        if i['id'] == int(ofnum):
@@ -163,21 +163,21 @@ def requestOffer(request, sID):
                 )
                         
             if newnote:
-                application = Requestservice.objects.filter(serviceID=sID)
+                application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
                 context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
                 return render(request, 'landing/offerings.html', context)
         else:
             return HttpResponse("A problem occured. Please try again later")
     else:
-        application = Requestservice.objects.filter(serviceID=sID)
+        application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
         context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
         return render(request, 'landing/offerings.html', context)
 
 @login_required(login_url='login')
-def deleteRequest(request, rID, pID, sID):
+def deleteRequest(request, rID):
     reqSrvs = Requestservice.objects.get(requestID=rID)
-    providerUser = User.objects.get(username=pID)
-    offer = Offering.objects.get(serviceID=sID)
+    offer = reqSrvs.serviceID
+    providerUser = offer.providerID
     blkQnt= offer.duration
 
     requestingUser = request.user
@@ -202,23 +202,32 @@ def assigning(request, ofnum):
 
 @login_required(login_url='login')
 def assignService(request,sID, rID, uID, sType):
-    newassignment = Assignment.objects.create(requestID=Requestservice.objects.get(requestID=rID), approverID=User.objects.get(username=request.user), requesterID=User.objects.get(username=uID), serviceType=sType, status="Open")    
+    myRequest = Requestservice.objects.get(requestID=rID)
+
+    newassignment = Assignment.objects.create(
+            requestID=myRequest, 
+            approverID=request.user, 
+            requesterID=myRequest.requesterID, 
+            serviceType=myRequest.serviceID.serviceType, 
+            status="Open"
+        )    
+
     if newassignment:
         # inprogress credit
         newassignment.requestID.serviceID.status = 'Assigned'
         newassignment.save()
 
         newnote = Notification.objects.create(
-            serviceID=Offering.objects.get(serviceID=sID), 
-            receiverID=User.objects.get(username=uID), 
-            noteContent=request.user.username
-                        +' approved your request for '
-                        + Offering.objects.get(serviceID=sID).keywords, 
-                        status='Unread'
-                )
+                serviceID=myRequest.serviceID, 
+                receiverID=myRequest.requesterID, 
+                noteContent=request.user.username
+                            +' approved your request for '
+                            + myRequest.serviceID.keywords, 
+                status='Unread'
+            )
         if newnote:
-            application = Requestservice.objects.filter(serviceID=sID)
-            context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+            application = Requestservice.objects.filter(serviceID=myRequest.serviceID)
+            context = {'offers':myRequest.serviceID, "applications":application}
             return render(request, 'landing/assignment.html', context)
     else:
         return HttpResponse("A problem occured. Please try again later")

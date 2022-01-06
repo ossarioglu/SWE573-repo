@@ -16,7 +16,7 @@ urlpatterns = [
     path('profile/<str:userKey>/', views.userProfile, name ="user-profile"), 
 
     path('requests/<str:sID>/', views.requestOffer, name ="request-Service"), 
-    path('requests/delete/<str:rID>/<str:pID>/<str:sID>/', views.deleteRequest, name ="delete-Request"), 
+    path('requests/delete/<str:rID>/', views.deleteRequest, name ="delete-Request"), 
 
     path('assignment/<str:ofnum>/', views.assigning, name ="assign"), 
     path('assignment/<str:sID>/<str:rID>/<str:uID>/<str:sType>/', views.assignService, name ="assign-Service"), 
