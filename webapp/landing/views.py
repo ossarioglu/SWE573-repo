@@ -151,8 +151,8 @@ def requestOffer(request, sID):
             request.user.profile.blockCredit(-blkQnt)
             request.user.profile.save()
 
-            offer.providerID.profile.blockCredit(blkQnt)
-            offer.providerID.profile.save()
+            #offer.providerID.profile.blockCredit(blkQnt)
+            #offer.providerID.profile.save()
 
             newnote = Notification.objects.create(
                 serviceID=offer, 
@@ -189,6 +189,14 @@ def deleteRequest(request, rID):
 
     if request.method == 'POST':
         reqSrvs.delete()
+
+        blkQnt = offer.duration
+        request.user.profile.blockCredit(+blkQnt)
+        request.user.profile.save()
+
+        #offer.providerID.profile.blockCredit(-blkQnt)
+        #offer.providerID.profile.save()
+
         return redirect('home')
     return render(request, 'landing/cancelRequest.html', context)
 
