@@ -1,4 +1,4 @@
-from typing import ContextManager
+from typing import ContextManager, DefaultDict
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -144,33 +144,40 @@ def deleteOffer(request, ofNum):
 def requestOffer(request, sID):
     offer = Offering.objects.get(serviceID=sID)
 
-    if not Requestservice.objects.filter(serviceID=offer).filter(requesterID=request.user).exists():
-        newrequest = Requestservice.objects.create(serviceID=offer, requesterID=request.user, serviceType=offer.serviceType, status='Inprocess')
-        if newrequest:
-            blkQnt = offer.duration
-            request.user.profile.blockCredit(-blkQnt)
-            request.user.profile.save()
+    if (request.user.profile.creditAmount + request.user.profile.creditInprocess) >= offer.duration :
 
-            #offer.providerID.profile.blockCredit(blkQnt)
-            #offer.providerID.profile.save()
+        if not Requestservice.objects.filter(serviceID=offer).filter(requesterID=request.user).exists():
+            newrequest = Requestservice.objects.create(serviceID=offer, requesterID=request.user, serviceType=offer.serviceType, status='Inprocess')
+            if newrequest:
+                blkQnt = offer.duration
+                request.user.profile.blockCredit(-blkQnt)
+                request.user.profile.save()
 
-            newnote = Notification.objects.create(
-                serviceID=offer, 
-                receiverID=offer.providerID, 
-                noteContent=request.user.username+' applied for ' 
-                            + offer.keywords,
-                            status='Unread'
-                )
-                        
-            if newnote:
-                application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
-                context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
-                return render(request, 'landing/offerings.html', context)
+                #offer.providerID.profile.blockCredit(blkQnt)
+                #offer.providerID.profile.save()
+
+                newnote = Notification.objects.create(
+                    serviceID=offer, 
+                    receiverID=offer.providerID, 
+                    noteContent=request.user.username+' applied for ' 
+                                + offer.keywords,
+                                status='Unread'
+                    )
+                            
+                if newnote:
+                    application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
+                    context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+                    return render(request, 'landing/offerings.html', context)
+            else:
+                return HttpResponse("A problem occured. Please try again later")
         else:
-            return HttpResponse("A problem occured. Please try again later")
+            application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
+            context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+            return render(request, 'landing/offerings.html', context)
     else:
+        textMessage = "Not Enough Credit"
         application = Requestservice.objects.filter(serviceID=sID).filter(requesterID=request.user)
-        context = {'offers':Offering.objects.get(serviceID=sID), "applications":application}
+        context = {'offers':Offering.objects.get(serviceID=sID), "applications":application, "textMessage":textMessage}
         return render(request, 'landing/offerings.html', context)
 
 @login_required(login_url='login')
@@ -203,8 +210,10 @@ def deleteRequest(request, rID):
 def assigning(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
     application = Requestservice.objects.filter(serviceID=ofnum)
+    allAccepted = Requestservice.objects.filter(status='Accepted').filter(serviceID=offer).count()
+    remainingCapacity = offer.capacity - allAccepted
 
-    context = {'offers':offer, 'applications':application}
+    context = {'offers':offer, 'applications':application, "remainingCapacity":remainingCapacity}
     return render(request, 'landing/assignment.html', context)
 #    return HttpResponse('Offering Page')
 
@@ -212,33 +221,64 @@ def assigning(request, ofnum):
 def assignService(request,sID, rID, uID, sType):
     myRequest = Requestservice.objects.get(requestID=rID)
 
-    newassignment = Assignment.objects.create(
-            requestID=myRequest, 
-            approverID=request.user, 
-            requesterID=myRequest.requesterID, 
-            serviceType=myRequest.serviceID.serviceType, 
-            status="Open"
-        )    
+    if myRequest.status == 'Inprocess':
+        newassignment = Assignment.objects.create(
+                requestID=myRequest, 
+                approverID=request.user, 
+                requesterID=myRequest.requesterID, 
+                serviceType=myRequest.serviceID.serviceType, 
+                status="Open"
+            )    
 
-    if newassignment:
-        # inprogress credit
-        newassignment.requestID.serviceID.status = 'Assigned'
-        newassignment.save()
+        if newassignment:
+            # inprogress credit
+            newassignment.requestID.serviceID.status = 'Assigned'
+            newassignment.save()
+            
+            myRequest.status = 'Accepted'
+            myRequest.save()
 
-        newnote = Notification.objects.create(
-                serviceID=myRequest.serviceID, 
-                receiverID=myRequest.requesterID, 
-                noteContent=request.user.username
-                            +' approved your request for '
-                            + myRequest.serviceID.keywords, 
-                status='Unread'
-            )
-        if newnote:
-            application = Requestservice.objects.filter(serviceID=myRequest.serviceID)
-            context = {'offers':myRequest.serviceID, "applications":application}
-            return render(request, 'landing/assignment.html', context)
+            allAccepted = Requestservice.objects.filter(status='Accepted').filter(serviceID=myRequest.serviceID).count()
+            remainingCapacity = newassignment.requestID.serviceID.capacity - allAccepted
+
+            newnote = Notification.objects.create(
+                    serviceID=myRequest.serviceID, 
+                    receiverID=myRequest.requesterID, 
+                    noteContent=request.user.username
+                                +' approved your request for '
+                                + myRequest.serviceID.keywords, 
+                    status='Unread'
+                )
+            if newnote:
+
+                if remainingCapacity == 0:
+                    openRequests = Requestservice.objects.filter(status='Inprocess').filter(serviceID=myRequest.serviceID)
+                    
+                    for openRqst in openRequests:
+                        openRqst.status = 'Rejected'
+                        openRqst.save()
+
+                        blkQnt = openRqst.serviceID.duration
+                        openRqst.requesterID.profile.blockCredit(+blkQnt)
+                        openRqst.requesterID.profile.save()
+                        
+                        newnote = Notification.objects.create(
+                                serviceID=openRqst.serviceID, 
+                                receiverID=openRqst.requesterID, 
+                                noteContent=request.user.username
+                                            +' could not acceept your request for '
+                                            + myRequest.serviceID.keywords
+                                            +' due to capacity constraints',
+                                status='Unread'
+                            )
+
+                application = Requestservice.objects.filter(serviceID=myRequest.serviceID)
+                context = {'offers':myRequest.serviceID, "applications":application, "remainingCapacity":remainingCapacity}
+                return render(request, 'landing/assignment.html', context)
+        else:
+            return HttpResponse("A problem occured. Please try again later")
     else:
-        return HttpResponse("A problem occured. Please try again later")
+        return redirect('home')
 
 def handshaking(request):
     providedAssignment = Assignment.objects.filter(approverID=request.user)
@@ -278,6 +318,19 @@ def confirmation(request, asNum):
             myAssignment.save()
             if aStatus == "Closed":
                 myAssignment.requestID.serviceID.status = 'Closed'
+                myAssignment.requestID.serviceID.save()
+
+                blkQnt = myAssignment.requestID.serviceID.duration
+                myAssignment.requestID.serviceID.providerID.profile.updateCredit(+blkQnt)
+                myAssignment.requestID.serviceID.providerID.profile.save()
+
+                allRequests = Requestservice.objects.filter(serviceID=myAssignment.requestID.serviceID)
+
+                for myRequest in allRequests:
+                    if myRequest.status == "Accepted":
+                        myRequest.requesterID.profile.updateCredit(-blkQnt)
+                        myRequest.requesterID.profile.blockCredit(+blkQnt)
+                        myRequest.requesterID.profile.save()    
 
             Notification.objects.create(
                 serviceID=myAssignment.requestID.serviceID, 

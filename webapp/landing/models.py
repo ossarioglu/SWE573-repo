@@ -27,7 +27,6 @@ class Profile(models.Model):
         return f'{self.user.username}'
     def updateCredit(self, amount):
         self.creditAmount += amount
-        self.creditInprocess -= amount
         return True
     def blockCredit(self, amount):
         self.creditInprocess += amount
@@ -61,7 +60,7 @@ class Offering(models.Model):
 
     serviceID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=10,choices=SERVICE_STATUS, default='New', editable = False)
+    status = models.CharField(max_length=10,choices=SERVICE_STATUS, default='New', editable = True)
     providerID = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(editable=True, max_length=100)
     picture = models.ImageField(upload_to='Services', null=True, default="Cat03.png")

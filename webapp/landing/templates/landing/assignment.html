@@ -63,15 +63,25 @@
                         <div>
                             <h5> {{ myapp.requesterID.profile.userReputation }}</h5>
                         </div>
+                        {% if myapp.status == 'Inprocess' %}
                         <div>
                             <a class="btn btn-primary btn-sm" href="{% url 'assign-Service' offers.serviceID myapp.requestID  myapp.requesterID 'offering' %}" role="button">Assign</a>
                         </div>
+                        {% else %}
+                            {% if myapp.status == 'Accepted' %}
+                                <p class="text-success">Accepted</p>
+                            {% else %}
+                                <p class="text-danger">Rejected</p>
+                            {% endif %}
+                        {% endif %}
+
                     </div>
                     </span>
                 {% endfor %}
             </span>
             <hr>
-
+            <h4> Available Capacity: {{ remainingCapacity }}</h4>
+            <hr>
         </div>
 
         <div>

@@ -43,7 +43,11 @@
                      
                         {% else %}  
                             {% if applications.count ==  0 %}
-                                <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                {% if textMessage == 'Not Enough Credit' %}
+                                    <p class="text-danger">Not Enough Credit</p>
+                                {% else %}
+                                    <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                {% endif %}
                             {% else %}
                                 {% for a in applications %}
                                     {% if request.user == a.requesterID %}
