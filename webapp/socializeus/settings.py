@@ -80,7 +80,6 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 
 
 
-"""
 
 
 DATABASES = {
@@ -107,6 +106,7 @@ DATABASES = {
     }
 }
 
+"""
 
 
 # Password validation

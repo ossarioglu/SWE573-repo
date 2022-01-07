@@ -72,7 +72,25 @@
         <form method="POST" accept="">
             {% csrf_token %}
 
-            {{ form.as_p }}
+         <!--   {{ form.as_p }} --> 
+
+            {{ form.non_field_errors }}
+            <div class="fieldWrapper">
+                {{ form.username.errors }}
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.password1.errors }}
+                <label for="{{ form.password1.id_for_label }}">Password</label>
+                {{ form.password1 }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.password2.errors }}
+                <label for="{{ form.password2.id_for_label }}">Re-Type Password</label>
+                {{ form.password2 }}
+            </div>
+
             <div class="col-12">
                 <button class="btn btn-outline-success" type="submit">Sign Up</button>
             </div>
@@ -93,6 +111,10 @@
     </div>
     
 </div>
+
+
+
+
 
 
 
