@@ -18,7 +18,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     userType = models.CharField(max_length=10,choices=USER_TYPES,default='user')
     userReputation = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
-    creditAmount = models.PositiveIntegerField(editable=True,default=10)
+    creditAmount = models.PositiveIntegerField(editable=True,default=5)
     userDetails = models.TextField(max_length=200,null=True)
     userLocation = models.CharField(max_length=50)
     userPicture = models.ImageField(upload_to='Profiles',null=True, default="male.png")

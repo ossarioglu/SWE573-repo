@@ -54,6 +54,10 @@ def signUpPage(request):
             user.username = user.username.lower()
             user.save()
             login(request,user)
+            
+            newProfile = Profile.objects.create(user=user, userLocation=request.POST.get('location'))
+            newProfile.save()
+
             return redirect('home')
         else:
             messages.error(request, 'An error occured during registration')

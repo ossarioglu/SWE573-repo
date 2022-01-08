@@ -111,10 +111,51 @@
                 <label for="{{ form.password2.id_for_label }}">Re-Type Password</label>
             </div>
 
+            <div class="form-floating mb-3">
+                {{ form.first_name.errors }}
+                <input type="text" 
+                       class="form-control" 
+                       id='{{form.first_name.id_for_label}}' 
+                       name='{{form.first_name.html_name}}' 
+                       {% if form.first_name.field.required %}required{% endif %}
+                       value='{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}' 
+                       placeholder='Your First Name'>
+                <label for="{{ form.first_name.id_for_label }}">First Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                {{ form.last_name.errors }}
+                <input type="text" 
+                    class="form-control" 
+                    id='{{form.last_name.id_for_label}}' 
+                    name='{{form.last_name.html_name}}' 
+                    {% if form.last_name.field.required %}required{% endif %}
+                    value='{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}' 
+                    placeholder='Your Surname Name'>
+                <label for="{{ form.last_name.id_for_label }}">Surname</label>
+
+            </div>
+
+            <div class="form-floating mb-3">
+                {{ form.email.errors }}
+                <input type="text" 
+                    class="form-control" 
+                    id='{{form.email.id_for_label}}' 
+                    name='{{form.email.html_name}}' 
+                    {% if form.email.field.required %}required{% endif %}
+                    value='{% if form.email.value %}{{ form.email.value }}{% endif %}' 
+                    placeholder='Email Address'>
+                <label for="{{ form.email.id_for_label }}">Email</label>
+
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" name="location" placeholder="Your Location">
+                <label for="floatingInput">Location</label>
+            <h5>     </h5>
             <div class="col-12">
                 <button class="btn btn-outline-success" type="submit">Sign Up</button>
             </div>
-
             <!-- input type="submit" name="Register" /-->
 
         </form>
