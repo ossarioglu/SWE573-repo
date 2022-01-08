@@ -110,8 +110,9 @@ def createOffer(request, page):
     service = page
 
     if request.method == 'POST':
-
         selectCategory = request.POST.get('selectCategory')
+        getTag, created = Tag.objects.get_or_create(tagName=selectCategory)
+
         keywords = request.POST.get('keywords')
         serviceInfo = request.POST.get('serviceInfo')
         startingDate = request.POST.get('startingDate')
@@ -125,7 +126,7 @@ def createOffer(request, page):
         picture = request.POST.get('picture')
 
         myService = Offering.objects.create(
-            tag=Tag.objects.get(tagName=selectCategory),
+            tag=getTag,
             providerID = request.user,
             keywords = keywords,
             picture = picture,
@@ -150,6 +151,7 @@ def createOffer(request, page):
 @login_required(login_url='login')
 def updateOffer(request, ofNum):
 
+    myKeywords = Tag.objects.all()
     offer = Offering.objects.get(serviceID=ofNum)
     form = OfferForm(instance=offer)
 
@@ -161,8 +163,8 @@ def updateOffer(request, ofNum):
         if form.is_valid():
             form.save()
             return redirect('home')
-    context = {'form':form}
-    return render(request, 'landing/create_offering.html', context)
+    context = {'form':form,'myTags':myKeywords}
+    return render(request, 'landing/edit_offering.html', context)
 
 @login_required(login_url='login')
 def deleteOffer(request, ofNum):
