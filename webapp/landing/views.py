@@ -180,7 +180,7 @@ def updateOffer(request, ofNum):
         return redirect('home')
         
     context = {'form':form,'myTags':myKeywords,'offer':offer}
-    return render(request, 'landing/edit_offering_WIP.html', context)
+    return render(request, 'landing/edit_offering.html', context)
 
 @login_required(login_url='login')
 def deleteOffer(request, ofNum):
