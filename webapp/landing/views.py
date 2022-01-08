@@ -1,4 +1,5 @@
 from typing import ContextManager, DefaultDict
+from django.forms.widgets import NullBooleanSelect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -153,18 +154,33 @@ def updateOffer(request, ofNum):
 
     myKeywords = Tag.objects.all()
     offer = Offering.objects.get(serviceID=ofNum)
-    form = OfferForm(instance=offer)
+    form = OfferForm(instance=offer)    
 
     if request.user != offer.providerID:
         return HttpResponse('You are not allowed to update this offer')
 
     if request.method == 'POST':
-        form = OfferForm(request.POST, instance=offer)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    context = {'form':form,'myTags':myKeywords}
-    return render(request, 'landing/edit_offering.html', context)
+
+        selectCategory = request.POST.get('selectCategory')
+        getTag, created = Tag.objects.get_or_create(tagName=selectCategory)
+        offer.tag = getTag
+        offer.keywords = request.POST.get('keywords')
+        offer.serviceInfo = request.POST.get('serviceInfo')
+        offer.startingDate = request.POST.get('startingDate')
+        offer.duration = request.POST.get('duration')
+        offer.capacity = request.POST.get('capacity')
+        offer.meetingType = request.POST.get('meetingType')
+        offer.location = request.POST.get('location')
+        offer.recurrance = request.POST.get('recurrance')
+        offer.recurrancePeriod = request.POST.get('recurrancePeriod')
+        offer.deadlineForUpdate = request.POST.get('deadlineForCancel')
+        if request.FILES.get('picture') is not None:
+            offer.picture = request.FILES.get('picture')
+        offer.save()
+        return redirect('home')
+        
+    context = {'form':form,'myTags':myKeywords,'offer':offer}
+    return render(request, 'landing/edit_offering_WIP.html', context)
 
 @login_required(login_url='login')
 def deleteOffer(request, ofNum):
