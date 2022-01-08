@@ -75,20 +75,40 @@
          <!--   {{ form.as_p }} --> 
 
             {{ form.non_field_errors }}
-            <div class="fieldWrapper">
+            <div class="form-floating mb-3">
                 {{ form.username.errors }}
-                <label for="{{ form.username.id_for_label }}">Username:</label>
-                {{ form.username }}
+                <input type="text" 
+                       class="form-control" 
+                       id='{{form.username.id_for_label}}' 
+                       name='{{form.username.html_name}}' 
+                       {% if form.username.field.required %}required{% endif %}
+                       value='{% if form.username.value %}{{ form.username.value }}{% endif %}' 
+                       placeholder='Enter Username'>
+                <label for="{{ form.username.id_for_label }}">Username</label>
             </div>
-            <div class="fieldWrapper">
+
+            <div class="form-floating mb-3">
                 {{ form.password1.errors }}
+                <input type="password" 
+                       class="form-control" 
+                       id='{{form.password1.id_for_label}}' 
+                       name='{{form.password1.html_name}}' 
+                       {% if form.password.field.required %}required{% endif %}
+                       value='{% if form.password.value %}{{ form.password.value }}{% endif %}' 
+                       placeholder='Type Password'>
                 <label for="{{ form.password1.id_for_label }}">Password</label>
-                {{ form.password1 }}
             </div>
-            <div class="fieldWrapper">
+
+            <div class="form-floating mb-3">
                 {{ form.password2.errors }}
+                <input type="password" 
+                       class="form-control" 
+                       id='{{form.password2.id_for_label}}' 
+                       name='{{form.password2.html_name}}' 
+                       {% if form.password2.field.required %}required{% endif %}
+                       value='{% if form.password2.value %}{{ form.password2.value }}{% endif %}' 
+                       placeholder='Re-type Password'>
                 <label for="{{ form.password2.id_for_label }}">Re-Type Password</label>
-                {{ form.password2 }}
             </div>
 
             <div class="col-12">
