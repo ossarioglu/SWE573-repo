@@ -38,7 +38,9 @@
         <h3> Listed Offerings </h3>
         <h5>{{ offer_count }} offerings available </h5>
 
-        <a href="{% url 'create-offer' %}" > New Offer </a>
+        <a class="btn btn-outline-success" href="{% url 'create-offer' 'Offering' %}" role="button" > New Offer </a>
+        <a class="btn btn-outline-primary" href="{% url 'create-offer' 'Event' %}" role="button" > New Event </a>
+
         <hr>
     
         <div>        

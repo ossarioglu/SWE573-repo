@@ -10,12 +10,161 @@
 </style>
 
 <div class="create-container">
-    <div></div>
+
     <div>
-        <form method="POST" action="" >
+
+    </div>
+    <div>
+
+        <span>
+            <h2> Create a New {{page}} </h3>
+            <hr>
+        </span>
+        
+
+        <form class="row g-3 needs-validation" method="POST" action="" novalidate>
             {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Submit" />
+
+            <div class="col-md-7">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Service Category</span>
+                    <select class="form-select" id="selectCategory" name="selectCategory"  aria-describedby="inputGroupPrepend" required>
+                        <option selected disabled value="">Choose</option>
+                        {% for category in myTags %}
+                            <option value="{{category.tagName}}">{{category.tagName}}</option>
+                        {% endfor%}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please choose a category.
+                    </div>
+                    <a class="btn btn-primary btn-sm" href="" role="button">New Category</a>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Keywords</span>
+                    <input type="text" class="form-control" id="keywords" name="keywords" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Service Info</span>
+                    <textarea class="form-control" id="serviceInfo" name="serviceInfo"  aria-describedby="inputGroupPrepend" rows="3" required></textarea>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Date</span>
+                    <input type="text" class="form-control" id="startingDate" name="startingDate" value="{% now 'Y-m-d H:i' %}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a date.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Duration</span>
+                    <input type="text" class="form-control" id="duration" name="duration" value=1 aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a duration for event.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Capacity</span>
+                    <input type="text" class="form-control" id="capacity" name="capacity"  value=1 aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a capacity for event.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Meeting Type</span>
+                    <select class="form-select" id="meetingType" name="meetingType" aria-describedby="inputGroupPrepend" required>
+                        <option selected="">FaceToFace</option>
+                        <option value="Online">Online</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please choose a category.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Location</span>
+                    <input type="text" class="form-control" id="location" name="location" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Recurrance</span>
+                    <input type="text" class="form-control" id="recurrance" name="recurrance" value=1 aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a recurrence for event.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend"> Period</span>
+                    <select class="form-select" id="recurrancePeriod" name="recurrancePeriod" aria-describedby="inputGroupPrepend" required>
+                        <option selected="None">None</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please choose a Period.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Deadline</span>
+                    <input type="text" class="form-control" id="deadlineForCancel" name="deadlineForCancel" value="{% now 'Y-m-d H:i' %}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a date.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Picture</span>
+                    <input type="file" class="form-control-file" id="picture" name="picture" aria-describedby="inputGroupPrepend" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Create Service</button>
+            </div>
+
+
+
         </form>
     </div>
     <div></div>

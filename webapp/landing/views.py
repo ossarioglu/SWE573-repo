@@ -84,6 +84,7 @@ def home(request):
     context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users, 'notes':unreadNote}
     return render(request, 'landing/home.html', context)
 
+@login_required(login_url='login')
 def offerings(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
     application = Requestservice.objects.filter(serviceID=ofnum).filter(requesterID=request.user)
@@ -103,16 +104,47 @@ def userProfile(request, userKey):
     
 
 @login_required(login_url='login')
-def createOffer(request):
+def createOffer(request, page):
     form = OfferForm()
+    myKeywords = Tag.objects.all()
+    service = page
+
     if request.method == 'POST':
-        form = OfferForm(request.POST)
-        if form.is_valid():
-            offer = form.save(commit=False)
-            offer.providerID = request.user
-            offer.save()
+
+        selectCategory = request.POST.get('selectCategory')
+        keywords = request.POST.get('keywords')
+        serviceInfo = request.POST.get('serviceInfo')
+        startingDate = request.POST.get('startingDate')
+        duration = request.POST.get('duration')
+        capacity = request.POST.get('capacity')
+        meetingType = request.POST.get('meetingType')
+        location = request.POST.get('location')
+        recurrance = request.POST.get('recurrance')
+        recurrancePeriod = request.POST.get('recurrancePeriod')
+        deadlineForCancel = request.POST.get('deadlineForCancel')
+        picture = request.POST.get('picture')
+
+        myService = Offering.objects.create(
+            tag=Tag.objects.get(tagName=selectCategory),
+            providerID = request.user,
+            keywords = keywords,
+            picture = picture,
+            serviceInfo = serviceInfo,
+            startingDate = startingDate,
+            duration = duration,
+            meetingType = meetingType,
+            location = location,
+            capacity = capacity,
+            recurrance = recurrance,
+            recurrancePeriod = recurrancePeriod,
+            deadlineForUpdate = deadlineForCancel,
+            serviceType = service
+        )
+        if myService:
+            myService.save()
             return redirect('home')
-    context = {'form': form}
+
+    context = {'form': form, 'myTags':myKeywords, 'page':service}
     return render(request, 'landing/create_offering.html', context)
 
 @login_required(login_url='login')

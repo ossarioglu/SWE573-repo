@@ -58,6 +58,11 @@ class Offering(models.Model):
         ("Monthly", "Monthly"),
     ]
 
+    MEETING_TYPE = [
+        ("FaceToFace", "FaceToFace"),
+        ("Online", "Online"),        
+    ]
+
     serviceID = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10,choices=SERVICE_STATUS, default='New', editable = True)
@@ -67,7 +72,7 @@ class Offering(models.Model):
     serviceInfo = models.TextField(max_length=200,null=True,blank=True)
     startingDate = models.DateTimeField(editable=True,default=today)
     duration = models.PositiveIntegerField(editable=True,default=1)
-    meetingType = models.CharField(max_length=10,default='FaceToFace')
+    meetingType = models.CharField(max_length=10,choices=MEETING_TYPE, default='FaceToFace', editable = True)
     location = models.CharField(max_length=50)
     capacity = models.PositiveIntegerField(editable=True,default=1)
     recurrance = models.PositiveIntegerField(editable=True,default=1)
