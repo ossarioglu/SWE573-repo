@@ -52,9 +52,13 @@
                             <h5> on {{ myAssign.requestID.serviceID.startingDate }}</h5>
                             <h6> with </h6> <h5>{{ myAssign.requestID.serviceID.capacity }} capacity </h5>
                             <hr>
-                            <h6> Recurrance: {{ myAssign.requestID.serviceID.recurrance }}</h6>
                             <h6> at {{ myAssign.requestID.serviceID.tag }} category</h6>
-                            <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
+                            <hr>
+                            {% if myAssign.requestID.serviceID.startingDate|timesince >= "1 min"  %}
+                                <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
+                            {% else %}
+                                <p class="text-danger">You can confirm the services after it happens</p>
+                            {% endif %}
                         </div>
                     </div>
                 </span> 
