@@ -410,20 +410,34 @@ def confirmation(request, asNum):
             myAssignment.status=aStatus
             myAssignment.save()
             if aStatus == "Closed":
-                myAssignment.requestID.serviceID.status = 'Closed'
-                myAssignment.requestID.serviceID.save()
-
-                blkQnt = myAssignment.requestID.serviceID.duration
-                myAssignment.requestID.serviceID.providerID.profile.updateCredit(+blkQnt)
-                myAssignment.requestID.serviceID.providerID.profile.save()
 
                 allRequests = Requestservice.objects.filter(serviceID=myAssignment.requestID.serviceID)
 
+                allAssignedClosedCheck = True
+                firstLoopBreak = False
                 for myRequest in allRequests:
-                    if myRequest.status == "Accepted":
-                        myRequest.requesterID.profile.updateCredit(-blkQnt)
-                        myRequest.requesterID.profile.blockCredit(+blkQnt)
-                        myRequest.requesterID.profile.save()    
+                    checkedAssignment = Assignment.objects.filter(requestID = myRequest)
+                    for chAssgn in checkedAssignment:
+                        if chAssgn.status != "Closed":
+                            allAssignedClosedCheck = False
+                            firstLoopBreak = True
+                            break
+                    if firstLoopBreak: 
+                            break
+
+                if allAssignedClosedCheck:
+                    myAssignment.requestID.serviceID.status = 'Closed'
+                    myAssignment.requestID.serviceID.save()
+
+                    blkQnt = myAssignment.requestID.serviceID.duration
+                    myAssignment.requestID.serviceID.providerID.profile.updateCredit(+blkQnt)
+                    myAssignment.requestID.serviceID.providerID.profile.save()
+
+                    for myRequest in allRequests:
+                        if myRequest.status == "Accepted":
+                            myRequest.requesterID.profile.updateCredit(-blkQnt)
+                            myRequest.requesterID.profile.blockCredit(+blkQnt)
+                            myRequest.requesterID.profile.save()    
 
             Notification.objects.create(
                 serviceID=myAssignment.requestID.serviceID, 
