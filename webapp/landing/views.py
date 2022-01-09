@@ -430,16 +430,36 @@ def confirmation(request, asNum):
                 if allAssignedClosedCheck:
                     myAssignment.requestID.serviceID.status = 'Closed'
                     myAssignment.requestID.serviceID.save()
+                    
+                    myFeedback = Feedback.objects.filter(takerID=myAssignment.requestID.serviceID.providerID)
+                    sumRating = 0.0
+                    countRating = 0
+                    for feeds in myFeedback:
+                        sumRating += feeds.rating
+                        countRating += 1
+                    myRating = sumRating / countRating
 
                     blkQnt = myAssignment.requestID.serviceID.duration
                     myAssignment.requestID.serviceID.providerID.profile.updateCredit(+blkQnt)
+                    myAssignment.requestID.serviceID.providerID.profile.userReputation = myRating
+
                     myAssignment.requestID.serviceID.providerID.profile.save()
 
                     for myRequest in allRequests:
                         if myRequest.status == "Accepted":
+                            myFeedback = Feedback.objects.filter(takerID=myRequest.requesterID)
+                            sumRating = 0.0
+                            countRating = 0
+                            for feeds in myFeedback:
+                                sumRating += feeds.rating
+                                countRating += 1
+                            myRating = sumRating / countRating
+
                             myRequest.requesterID.profile.updateCredit(-blkQnt)
                             myRequest.requesterID.profile.blockCredit(+blkQnt)
+                            myRequest.requesterID.profile.userReputation = myRating
                             myRequest.requesterID.profile.save()    
+
 
             Notification.objects.create(
                 serviceID=myAssignment.requestID.serviceID, 
