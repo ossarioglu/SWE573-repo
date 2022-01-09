@@ -112,7 +112,7 @@ def updateProfile(request, userKey):
     form = UserCreationForm(instance=user)
 
     if request.user != user:
-        return HttpResponse('You are not allowed to update this offer')
+        return HttpResponse('You are not allowed to update this profile')
 
     if request.method == 'POST':
 

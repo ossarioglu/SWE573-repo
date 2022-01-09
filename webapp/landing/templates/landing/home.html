@@ -49,14 +49,19 @@
                 <div class="offer-container">
                     <div>
                         <h5>{{ offer_name.keywords}}</h5>
-                        <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
-                        {% if request.user == offer_name.providerID %}
-                            <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
-                            <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                        {% if offer_name.startingDate|timesince >= "1 min"  %}
+                            <p class="text-danger">Service is over</p>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
+                            {% if request.user == offer_name.providerID %}
+                                <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
+                            {% endif %}
                         {% endif %}
+                        
                         <h6>  </h6>
                         <span>
-                            @{{ offer_name.providerID}}
+                            @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
                         </span>
                         <p class="text-secondary">
                             <h6>on {{ offer_name.startingDate}}</h6>
