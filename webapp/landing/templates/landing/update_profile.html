@@ -1,0 +1,106 @@
+{% extends 'main.html'%}
+
+{% block content %}
+
+<style>
+    .profile-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr; 
+    }
+</style>
+
+<div class="profile-container">
+
+    <div>
+
+    </div>
+
+    <div>   
+        <form class="row g-3 needs-validation" method="POST" action="" novalidate>
+            {% csrf_token %}
+
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">First Name</span>
+                    <input type="text" class="form-control" id="firstName" name="firstName" value="{{user.first_name}}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Last Name</span>
+                    <input type="text" class="form-control" id="lastName" name="lastName" value="{{user.last_name}}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Email</span>
+                    <input type="text" class="form-control" id="email" name="email" value="{{user.email}}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Location</span>
+                    <input type="text" class="form-control" id="location" name="location" value="{{myProfile.userLocation}}" aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="col-md-12">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Details</span>
+                    <textarea class="form-control" id="userDetails" name="userDetails"  aria-describedby="inputGroupPrepend" rows="3" required> {{myProfile.userDetails}} </textarea>
+                    <div class="invalid-feedback">
+                        Please choose a keyword.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Profile Picture</span>
+                    <input type="file" class="form-control-file" id="picture" name="picture"  aria-describedby="inputGroupPrepend" required value="{{form.userPicture}}" >
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+            </div>
+            
+
+            <div class="col-2">
+                <button class="btn btn-outline-success" type="submit">Update</button>
+            </div>
+            <!-- input type="submit" name="Register" /-->
+
+        </form>
+
+    </div>
+
+    <div>
+        
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+{% endblock content %}

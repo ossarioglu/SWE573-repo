@@ -27,7 +27,7 @@
                 <h3> {{user.first_name}} {{user.last_name}}</h3>
             </div>
             <div>
-                <a class="btn btn-success btn-sm" href="" role="button">Edit Profile</a>
+                <a class="btn btn-success btn-sm" href="{% url 'update-profile' user.username %}" role="button">Edit Profile</a>
             </div>
         </div>
         <hr>  

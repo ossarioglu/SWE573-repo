@@ -86,7 +86,7 @@
                        id='{{form.password1.id_for_label}}' 
                        name='{{form.password1.html_name}}' 
                        {% if form.password.field.required %}required{% endif %}
-                       value='{% if form.password.value %}{{ form.password.value }}{% endif %}' 
+                       value='{% if form.password1.value %}{{ form.password1.value }}{% endif %}' 
                        placeholder='Type Password'>
                 <label for="{{ form.password1.id_for_label }}">Password</label>
             </div>

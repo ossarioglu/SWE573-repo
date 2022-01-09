@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import Feedback, Offering, Tag, Profile , Requestservice, Notification, Assignment
-from .forms import OfferForm
+from .forms import OfferForm, ProfileForm
 # My views
 
 
@@ -103,6 +103,32 @@ def userProfile(request, userKey):
     context = {'user':user, 'offers':offers}
     return render(request, 'landing/profile.html', context) 
     
+def updateProfile(request, userKey):
+    user = User.objects.get(username=userKey)
+    myProfile = Profile.objects.get(user=user)
+
+    form = UserCreationForm(instance=user)
+
+    if request.user != user:
+        return HttpResponse('You are not allowed to update this offer')
+
+    if request.method == 'POST':
+
+        user.first_name = request.POST.get('firstName')
+        user.last_name = request.POST.get('lastName')
+        user.email = request.POST.get('email')
+        user.save()
+
+        myProfile.userLocation = request.POST.get('location')
+        myProfile.userDetails = request.POST.get('userDetails')
+        if request.FILES.get('picture') is not None:
+            myProfile.userPicture = request.FILES.get('picture')
+        myProfile.save()
+
+        return redirect('home')
+        
+    context = {'form':form,'myProfile':myProfile, 'user':user}
+    return render(request, 'landing/update_profile.html', context)
 
 @login_required(login_url='login')
 def createOffer(request, page):

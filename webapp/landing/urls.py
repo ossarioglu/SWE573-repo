@@ -14,6 +14,8 @@ urlpatterns = [
     path('delete-offer/<str:ofNum>/', views.deleteOffer, name ="delete-offer"), 
     
     path('profile/<str:userKey>/', views.userProfile, name ="user-profile"), 
+    path('update-profile/<str:userKey>/', views.updateProfile, name ="update-profile"), 
+
 
     path('requests/<str:sID>/', views.requestOffer, name ="request-Service"), 
     path('requests/delete/<str:rID>/', views.deleteRequest, name ="delete-Request"), 
