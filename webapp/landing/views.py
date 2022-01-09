@@ -83,12 +83,14 @@ def home(request):
     tags = Tag.objects.all()
     users = User.objects.all()
     offer_count = offers.filter(status='New').count()
+    offer_count_old = offers.filter(status='Closed').count()
+
     if request.user.is_authenticated:
         unreadNote = request.user.receiverID.filter(status='Unread').count
     else:
         unreadNote = ""
 
-    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users, 'notes':unreadNote}
+    context = {'offers':offers, 'tags':tags, 'offer_count':offer_count,'users':users, 'notes':unreadNote, 'offer_count_old':offer_count_old}
     return render(request, 'landing/home.html', context)
 
 @login_required(login_url='login')
