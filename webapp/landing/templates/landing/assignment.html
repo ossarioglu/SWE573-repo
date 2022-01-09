@@ -64,9 +64,14 @@
                             <h5> {{ myapp.requesterID.profile.userReputation }}</h5>
                         </div>
                         {% if myapp.status == 'Inprocess' %}
-                        <div>
-                            <a class="btn btn-primary btn-sm" href="{% url 'assign-Service' offers.serviceID myapp.requestID  myapp.requesterID 'offering' %}" role="button">Assign</a>
-                        </div>
+                            {% if offers.startingDate|timesince >= "1 min"  %}
+                                <p class="text-danger">Service is over</p>
+                            {% else %}
+                                <div>
+                                    <a class="btn btn-primary btn-sm" href="{% url 'assign-Service' offers.serviceID myapp.requestID  myapp.requesterID offers.serviceType %}" role="button">Assign</a>
+                                </div>
+                            {% endif %}
+
                         {% else %}
                             {% if myapp.status == 'Accepted' %}
                                 <p class="text-success">Accepted</p>
