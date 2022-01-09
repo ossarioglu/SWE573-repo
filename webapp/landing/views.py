@@ -295,9 +295,6 @@ def deleteRequest(request, rID):
         request.user.profile.blockCredit(+blkQnt)
         request.user.profile.save()
 
-        #offer.providerID.profile.blockCredit(-blkQnt)
-        #offer.providerID.profile.save()
-
         return redirect('home')
     return render(request, 'landing/cancelRequest.html', context)
 

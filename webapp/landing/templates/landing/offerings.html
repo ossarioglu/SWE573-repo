@@ -35,26 +35,61 @@
                     <div>
 
                         {% if request.user == offers.providerID %}
-                            <a class="btn btn-success btn-sm" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
-                            <h3>  </h3>
-                            <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
-                            <h3>  </h3>
-                            <a class="btn btn-primary btn-sm" href="{% url 'assign' offers.serviceID %}" role="button">Assign</a>
-                     
+                            {% if offers.startingDate|timesince >= "1 min"  %}
+
+                                <p class="text-danger">Service is over</>
+                                    <h3>  </h3>
+                                <a class="btn btn-success btn-sm disabled" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
+                                    <h3>  </h3>
+                                <a class="btn btn-danger btn-sm disabled" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
+                                    <h3>  </h3>
+                                <a class="btn btn-primary btn-sm disabled" href="{% url 'assign' offers.serviceID %}" role="button">Assign</a>
+                            {% else %}
+
+                                {% if offers.deadlineForUpdate|timesince >= "1 min"  %}
+                                    <p class="text-danger">Edit timehorizon is over </p>
+                                    <a class="btn btn-success btn-sm disabled" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
+                                    <h3>  </h3>
+                                    <a class="btn btn-danger btn-sm disabled" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
+                                {% else %}
+                                    <a class="btn btn-success btn-sm" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
+                                    <h3>  </h3>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offers.serviceID %}" role="button">Delete</a>
+                                {% endif %}
+                                <h3>  </h3>
+                                <a class="btn btn-primary btn-sm" href="{% url 'assign' offers.serviceID %}" role="button">Assign</a>
+                            {% endif %}
+
                         {% else %}  
                             {% if applications.count ==  0 %}
                                 {% if textMessage == 'Not Enough Credit' %}
                                     <p class="text-danger">Not Enough Credit</p>
                                 {% else %}
-                                    <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                    {% if offers.startingDate|timesince >= "1 min"  %}
+                                        <p class="text-danger">Service is over</p>
+                                        <a class="btn btn-primary btn-sm disabled" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                    {% else %}
+                                        <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
                                 {% for a in applications %}
                                     {% if request.user == a.requesterID %}
                                         <h7> Already applied </h7> 
-                                        <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
+                                        {% if offers.deadlineForUpdate|timesince >= "1 min"  %}
+                                            <p class="text-danger">Edit timehorizon is over</p>
+                                            <a class="btn btn-danger btn-sm disabled" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
+                                        {% else %}
+                                            <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
+                                        {% endif %}
+
                                     {% else %}
-                                        <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                        {% if offers.startingDate|timesince >= "1 min"  %}
+                                            <p class="text-danger">Service is over</p>
+                                            <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                        {% else %}
+                                            <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}  
                             {% endif %}
