@@ -61,7 +61,7 @@
                         
                         <h6>  </h6>
                         <span>
-                            @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
+                            {{ offer_name.serviceType}} by @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
                         </span>
                         <p class="text-secondary">
                             <h6>on {{ offer_name.startingDate}}</h6>
@@ -115,7 +115,7 @@
                         
                         <h6>  </h6>
                         <span>
-                            @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
+                            {{ offer_name.serviceType}} by @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
                         </span>
                         <p class="text-secondary">
                             <h6>on {{ offer_name.startingDate}}</h6>

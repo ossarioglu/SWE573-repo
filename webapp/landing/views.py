@@ -239,18 +239,18 @@ def deleteOffer(request, ofNum):
 @login_required(login_url='login')
 def requestOffer(request, sID):
     offer = Offering.objects.get(serviceID=sID)
+    creditNeeded = 0
+    if offer.serviceType == "Offering":
+        creditNeeded = offer.duration
 
-    if (request.user.profile.creditAmount + request.user.profile.creditInprocess) >= offer.duration :
+    if (request.user.profile.creditAmount + request.user.profile.creditInprocess) >= creditNeeded:
 
         if not Requestservice.objects.filter(serviceID=offer).filter(requesterID=request.user).exists():
             newrequest = Requestservice.objects.create(serviceID=offer, requesterID=request.user, serviceType=offer.serviceType, status='Inprocess')
             if newrequest:
-                blkQnt = offer.duration
+                blkQnt = creditNeeded
                 request.user.profile.blockCredit(-blkQnt)
                 request.user.profile.save()
-
-                #offer.providerID.profile.blockCredit(blkQnt)
-                #offer.providerID.profile.save()
 
                 newnote = Notification.objects.create(
                     serviceID=offer, 
@@ -281,7 +281,12 @@ def deleteRequest(request, rID):
     reqSrvs = Requestservice.objects.get(requestID=rID)
     offer = reqSrvs.serviceID
     providerUser = offer.providerID
-    blkQnt= offer.duration
+    
+    creditNeeded = 0
+    if offer.serviceType == "Offering":
+        creditNeeded = offer.duration
+
+    blkQnt= creditNeeded
 
     requestingUser = request.user
 
@@ -293,7 +298,7 @@ def deleteRequest(request, rID):
     if request.method == 'POST':
         reqSrvs.delete()
 
-        blkQnt = offer.duration
+        blkQnt = creditNeeded
         request.user.profile.blockCredit(+blkQnt)
         request.user.profile.save()
 
@@ -352,7 +357,11 @@ def assignService(request,sID, rID, uID, sType):
                         openRqst.status = 'Rejected'
                         openRqst.save()
 
-                        blkQnt = openRqst.serviceID.duration
+                        creditNeeded = 0
+                        if openRqst.serviceID.serviceType == "Offering":
+                            creditNeeded = openRqst.serviceID.duration
+
+                        blkQnt= creditNeeded
                         openRqst.requesterID.profile.blockCredit(+blkQnt)
                         openRqst.requesterID.profile.save()
                         
@@ -439,7 +448,11 @@ def confirmation(request, asNum):
                         countRating += 1
                     myRating = sumRating / countRating
 
-                    blkQnt = myAssignment.requestID.serviceID.duration
+                    creditNeeded = 0
+                    if myAssignment.requestID.serviceID.serviceType == "Offering":
+                        creditNeeded = myAssignment.requestID.serviceID.duration
+
+                    blkQnt= creditNeeded
                     myAssignment.requestID.serviceID.providerID.profile.updateCredit(+blkQnt)
                     myAssignment.requestID.serviceID.providerID.profile.userReputation = myRating
 
