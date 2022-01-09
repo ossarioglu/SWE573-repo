@@ -20,6 +20,15 @@
         </div>
 
         <div>
+            <span>
+                <h3> Notifications </h3>
+                <hr>
+            </span>
+            {% if myNotes.count < 1 %}
+                <h6> There is no messages </h6>
+            {% endif %}
+
+
             {% for note in myNotes %}
                 <span>
                     <div class="format-container">
