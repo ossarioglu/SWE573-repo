@@ -27,6 +27,8 @@ class Profile(models.Model):
         return f'{self.user.username}'
     def updateCredit(self, amount):
         self.creditAmount += amount
+        if self.creditAmount > 15:
+            self.creditAmount = 15
         return True
     def blockCredit(self, amount):
         self.creditInprocess += amount
