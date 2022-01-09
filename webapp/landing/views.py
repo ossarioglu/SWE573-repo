@@ -1,5 +1,6 @@
 from typing import ContextManager, DefaultDict
 from django.forms.widgets import NullBooleanSelect
+from django.http.request import split_domain_port
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,11 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import UserCreationForm
+from datetime import datetime
+import datetime as mydatetime
+
+from django.utils.dateparse import parse_datetime
+
 
 from .models import Feedback, Offering, Tag, Profile , Requestservice, Notification, Assignment
 from .forms import OfferForm, ProfileForm
@@ -89,20 +95,16 @@ def home(request):
 def offerings(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
     application = Requestservice.objects.filter(serviceID=ofnum).filter(requesterID=request.user)
-#    offer : None
-#    for i in offers:
-#        if i['id'] == int(ofnum):
-#            offer = i
     context = {'offers':offer, "applications":application}
     return render(request, 'landing/offerings.html', context)
-#    return HttpResponse('Offering Page')
 
 def userProfile(request, userKey):
     user = User.objects.get(username=userKey)
     offers = user.offering_set.all()
     context = {'user':user, 'offers':offers}
     return render(request, 'landing/profile.html', context) 
-    
+
+@login_required(login_url='login')
 def updateProfile(request, userKey):
     user = User.objects.get(username=userKey)
     myProfile = Profile.objects.get(user=user)
@@ -142,35 +144,47 @@ def createOffer(request, page):
 
         keywords = request.POST.get('keywords')
         serviceInfo = request.POST.get('serviceInfo')
-        startingDate = request.POST.get('startingDate')
         duration = request.POST.get('duration')
         capacity = request.POST.get('capacity')
         meetingType = request.POST.get('meetingType')
         location = request.POST.get('location')
         recurrance = request.POST.get('recurrance')
         recurrancePeriod = request.POST.get('recurrancePeriod')
-        deadlineForCancel = request.POST.get('deadlineForCancel')
         picture = request.POST.get('picture')
+        startingDate = str(request.POST.get('startingDate'))
+        deadlineForCancel = str(request.POST.get('deadlineForCancel'))
+        startingDate = datetime.strptime(startingDate, '%Y-%m-%d %H:%M')
+        deadlineForCancel = datetime.strptime(deadlineForCancel, '%Y-%m-%d %H:%M')
 
-        myService = Offering.objects.create(
-            tag=getTag,
-            providerID = request.user,
-            keywords = keywords,
-            picture = picture,
-            serviceInfo = serviceInfo,
-            startingDate = startingDate,
-            duration = duration,
-            meetingType = meetingType,
-            location = location,
-            capacity = capacity,
-            recurrance = recurrance,
-            recurrancePeriod = recurrancePeriod,
-            deadlineForUpdate = deadlineForCancel,
-            serviceType = service
-        )
-        if myService:
-            myService.save()
-            return redirect('home')
+        for i in range(int(recurrance)):
+
+            myService = Offering.objects.create(
+                tag=getTag,
+                providerID = request.user,
+                keywords = keywords,
+                picture = picture,
+                serviceInfo = serviceInfo,
+                startingDate = startingDate,
+                duration = duration,
+                meetingType = meetingType,
+                location = location,
+                capacity = capacity,
+                recurrance = 1,
+                recurrancePeriod = 'None',
+                deadlineForUpdate = deadlineForCancel,
+                serviceType = service
+            )
+            if myService:
+                myService.save()
+            
+            if recurrancePeriod == 'Weekly':
+                startingDate = startingDate + mydatetime.timedelta(days=7)
+                deadlineForCancel = deadlineForCancel + mydatetime.timedelta(days=7)
+            elif recurrancePeriod == 'Monthly':
+                startingDate = startingDate + mydatetime.timedelta(days=30)
+                deadlineForCancel = deadlineForCancel + mydatetime.timedelta(days=30)
+
+        return redirect('home')
 
     context = {'form': form, 'myTags':myKeywords, 'page':service}
     return render(request, 'landing/create_offering.html', context)
@@ -287,6 +301,7 @@ def deleteRequest(request, rID):
         return redirect('home')
     return render(request, 'landing/cancelRequest.html', context)
 
+@login_required(login_url='login')
 def assigning(request, ofnum):
     offer = Offering.objects.get(serviceID=ofnum)
     application = Requestservice.objects.filter(serviceID=ofnum)
@@ -359,7 +374,7 @@ def assignService(request,sID, rID, uID, sType):
             return HttpResponse("A problem occured. Please try again later")
     else:
         return redirect('home')
-
+@login_required(login_url='login')
 def handshaking(request):
     providedAssignment = Assignment.objects.filter(approverID=request.user)
     receivedAssignment = Assignment.objects.filter(requesterID=request.user)
@@ -368,6 +383,7 @@ def handshaking(request):
     return render(request, 'landing/handshake.html', context)
 #    return HttpResponse('Offering Page')
 
+@login_required(login_url='login')
 def confirmation(request, asNum):
     myAssignment = Assignment.objects.get(assignID=asNum)
 
@@ -424,11 +440,13 @@ def confirmation(request, asNum):
     context = {'myAssignment':myAssignment, 'myFeedbacks':myFeedback }
     return render(request, 'landing/confirm.html', context)
 
+@login_required(login_url='login')
 def notifications(request):
     myNotes = request.user.receiverID.filter()
     context = {'myNotes':myNotes }
     return render(request, 'landing/notification.html', context)
 
+@login_required(login_url='login')
 def changeNote(request, nID):
     myNotes = request.user.receiverID.filter()
     myNote = Notification.objects.get(noteID=nID)
