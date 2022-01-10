@@ -52,6 +52,7 @@ def signOut(request):
     return redirect('home')
 
 def signUpPage(request):
+    form = MyRegisterForm()
     if request.method == 'POST':
         form = MyRegisterForm(request.POST)
         if form.is_valid():
@@ -69,9 +70,8 @@ def signUpPage(request):
             return redirect('home')
         else:
             messages.error(request, 'An error occured during registration')
-    else:
-        form = MyRegisterForm()
-        return render(request, 'landing/signup_in.html', {'form':form})
+    
+    return render(request, 'landing/signup_in.html', {'form':form})
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
