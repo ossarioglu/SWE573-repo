@@ -17,7 +17,7 @@ from django.utils.dateparse import parse_datetime
 
 
 from .models import Feedback, Offering, Tag, Profile , Requestservice, Notification, Assignment
-from .forms import OfferForm, ProfileForm
+from .forms import OfferForm, ProfileForm,MyRegisterForm
 # My views
 
 
@@ -52,13 +52,14 @@ def signOut(request):
     return redirect('home')
 
 def signUpPage(request):
-    form = UserCreationForm()
-
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
             user.save()
             login(request,user)
             
@@ -68,8 +69,9 @@ def signUpPage(request):
             return redirect('home')
         else:
             messages.error(request, 'An error occured during registration')
-            
-    return render(request, 'landing/signup_in.html', {'form':form})
+    else:
+        form = MyRegisterForm()
+        return render(request, 'landing/signup_in.html', {'form':form})
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
