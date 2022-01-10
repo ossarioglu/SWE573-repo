@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for creating a new service
+    Page gets page,myTags from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .create-container{
         display: grid;
@@ -12,19 +16,20 @@
 <div class="create-container">
 
     <div>
-
     </div>
+    
     <div>
 
+        <!-- Based on the page value, this becomes an offering or event creation page /-->
         <span>
             <h2> Create a New {{page}} </h3>
             <hr>
         </span>
         
-
         <form class="row g-3 needs-validation" method="POST" action="" novalidate>
             {% csrf_token %}
 
+            <!-- Category field for service creation form /-->
             <div class="col-md-7">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Service Category</span>
@@ -42,6 +47,7 @@
                 </div>
             </div>
 
+            <!-- Keyword field for service creation form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Keywords</span>
@@ -52,6 +58,7 @@
                 </div>
             </div>
 
+            <!-- Service Info field for service creation form /-->
             <div class="col-md-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Service Info</span>
@@ -61,7 +68,8 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- startingDate field for service creation form /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Date</span>
@@ -71,7 +79,8 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- Duration field for service creation form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Duration</span>
@@ -82,6 +91,7 @@
                 </div>
             </div>
 
+            <!-- Capacity field for service creation form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Capacity</span>
@@ -92,6 +102,7 @@
                 </div>
             </div>
 
+            <!-- Meeting Type field for service creation form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Meeting Type</span>
@@ -105,6 +116,7 @@
                 </div>
             </div>
 
+            <!-- Location field for service creation form /-->
             <div class="col-md-7">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Location</span>
@@ -115,6 +127,7 @@
                 </div>
             </div>
 
+            <!-- Recurrance field for service creation form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Recurrance</span>
@@ -125,6 +138,7 @@
                 </div>
             </div>
 
+            <!-- Period for recurrence field for service creation form /-->
             <div class="col-md-4">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend"> Period</span>
@@ -139,6 +153,7 @@
                 </div>
             </div>
 
+            <!-- deadlineForCancel for recurrence field for service creation form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Deadline</span>
@@ -149,6 +164,7 @@
                 </div>
             </div>
 
+            <!-- Picture picker for recurrence field for service creation form /-->
             <div class="col-md-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Picture</span>

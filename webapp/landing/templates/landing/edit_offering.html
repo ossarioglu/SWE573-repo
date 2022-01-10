@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for updating service
+    Page gets myTags,offer,and form from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .create-container{
         display: grid;
@@ -12,20 +16,18 @@
 <div class="create-container">
 
     <div>
-
     </div>
+    
     <div>
-
         <span>
             <h2> Update This {{form.serviceType.value}} </h3>
             <hr>
         </span>
         
-
         <form class="row g-3 needs-validation" enctype=multipart/form-data method="POST" action="" novalidate>
             {% csrf_token %}
 
-
+            <!-- Service Category field for the form /-->
             <div class="col-md-7">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Service Category</span>
@@ -43,6 +45,7 @@
                 </div>
             </div>
 
+            <!-- Keyword of service field for the form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Keywords</span>
@@ -53,16 +56,18 @@
                 </div>
             </div>
 
+            <!-- Service Information field for the form /-->
             <div class="col-md-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Service Info</span>
                     <textarea class="form-control" id="serviceInfo" name="serviceInfo"  aria-describedby="inputGroupPrepend" rows="3" required> {{offer.serviceInfo}} </textarea>
                     <div class="invalid-feedback">
-                        Please choose a keyword.
+                        Please write information for service.
                     </div>
                 </div>
             </div>
 
+            <!-- startingDate field for the form /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Date</span>
@@ -73,6 +78,7 @@
                 </div>
             </div>
 
+            <!-- Duration field for the form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Duration</span>
@@ -83,6 +89,7 @@
                 </div>
             </div>
 
+            <!-- Capacity field for the form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Capacity</span>
@@ -93,6 +100,7 @@
                 </div>
             </div>
 
+            <!-- Meeting type field for the form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Meeting Type</span>
@@ -106,6 +114,7 @@
                 </div>
             </div>
 
+            <!-- Location field for the form /-->
             <div class="col-md-7">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Location</span>
@@ -116,6 +125,7 @@
                 </div>
             </div>
 
+            <!-- Recurrance field for the form /-->
             <div class="col-md-3">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Recurrance</span>
@@ -126,6 +136,7 @@
                 </div>
             </div>
 
+            <!-- Period for recurrence  field for the form /-->
             <div class="col-md-4">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend"> Period</span>
@@ -140,6 +151,7 @@
                 </div>
             </div>
 
+            <!-- deadlineForCancel field for the form /-->
             <div class="col-md-5">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Deadline</span>
@@ -149,7 +161,8 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- picture picker field for the form /-->
             <div class="col-md-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Picture</span>

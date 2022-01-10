@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for assigning service to users according to request to a service
+    Page gets offers,applications and remainingCapacity from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .offerings-container{
         display: grid;
@@ -19,12 +23,11 @@
 
 <div class="offerings-container">
         <div>
-
         </div>
 
         <div>
-
             <span>
+                <!-- This section displays service information to user /-->
                 <div class="format-container">
                     <div>
                         <img src="{{offers.picture.url}}" width="150" height="150"> 
@@ -48,6 +51,10 @@
                 </div>
             </span> 
             <hr>
+            
+            <!-- All applications for the relevant service is displayed at this section
+                - User applied for the service
+                - User's reputation is displayed /-->
             <h4> Applications for {{ offers.keywords }}</h4>
             <hr>
             <span>
@@ -63,6 +70,11 @@
                         <div>
                             <h5> {{ myapp.requesterID.profile.userReputation }}</h5>
                         </div>
+
+                        <!-- If application is not processes yet, and service has already started, 
+                            user cannot make any assignments for the service.
+                            Otherwise, there is an assignment button appearing next to application
+                        /-->
                         {% if myapp.status == 'Inprocess' %}
                             {% if offers.startingDate|timesince >= "1 min"  %}
                                 <p class="text-danger">Service is over</p>
@@ -73,6 +85,11 @@
                             {% endif %}
 
                         {% else %}
+                        
+                        <!-- If application is already processed, then status is displayed instead of an action button
+                            - Accepted for applications accepted
+                            - Rejection for applications rejected 
+                        /-->
                             {% if myapp.status == 'Accepted' %}
                                 <p class="text-success">Accepted</p>
                             {% else %}
@@ -85,6 +102,8 @@
                 {% endfor %}
             </span>
             <hr>
+            
+            <!-- Available capacity is displayed so user can decide how many assignment to be done /-->
             <h4> Available Capacity: {{ remainingCapacity }}</h4>
             <hr>
         </div>

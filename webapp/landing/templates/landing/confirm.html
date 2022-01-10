@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for confirming a service has happened, and giving feedback for service
+    Page gets myAssignment and myFeedbacks from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .offerings-container{
         display: grid;
@@ -20,11 +24,11 @@
 <div class="offerings-container">
 
         <div>
-
         </div>
 
         <div>
 
+            <!-- Service information related to assignment is displayed here /-->
             <span>
                 <div class="format-container">
                     <div>
@@ -56,9 +60,13 @@
 
             {% if myAssignment.status == 'Open' %}
                 <span>
+                
+                <!-- You can create a feedback if this assignment is still open  /-->
                 <form method="POST">
                     {% csrf_token %}
                     <div class="feedback-container">
+                        
+                        <!-- Field for choosing ratings  /-->
                         <div>
                             <label for="sRate">Rating:</label>
                             <select class="form-control" name="sRate">
@@ -69,6 +77,8 @@
                                 <option value=5>5</option>
                             </select>
                         </div>
+                        
+                        <!-- Field for giving comment  /-->
                         <div>
                             <label for="offerComment">Comment on Service</label>
                             <textarea class="form-control" name="offerComment" rows="1" placeholder="Please enter your comment on service"></textarea>
@@ -84,17 +94,24 @@
             {% else %}
 
                 {% for feeds in myFeedbacks %}
+                    
+                    <!-- If there is given feedback, then this feedback is displayed  /-->
                     <span>
                         <h5>  {{feeds.comment}} by {{feeds.giverID}} </h5> 
                         <h5>  {{feeds.created|timesince}} ago </h5> 
                     </span>
                     <hr>
+                    
                     {% if myAssignment.status != 'Closed' %}
+                        
+                        <!-- If there is given feedback but it's not your, then you can give a feedback  /-->
                         {% if feeds.giverID != request.user %}
                             <span>
                                 <form method="POST">
                                     {% csrf_token %}
                                     <div class="feedback-container">
+                                        
+                                        <!-- Field for choosing ratings  /-->
                                         <div>
                                             <label for="sRate">Rating:</label>
                                             <select class="form-control" name="sRate">
@@ -105,6 +122,8 @@
                                                 <option value=5>5</option>
                                             </select>
                                         </div>
+                
+                                        <!-- Field for giving comment  /-->                        
                                         <div>
                                             <label for="offerComment">Comment on Service</label>
                                             <textarea class="form-control" name="offerComment" rows="1" placeholder="Please enter your comment on service"></textarea>
@@ -130,6 +149,5 @@
 
         </div>
 </div>
-
 
 {% endblock content %}

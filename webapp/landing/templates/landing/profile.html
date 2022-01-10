@@ -2,15 +2,16 @@
 
 {% block content %}
 
+
+<!-- This page is displaying user profile
+    Page gets user, offers as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .profile-container{
         display: grid;
         grid-template-columns: 1fr 3fr 1fr; 
     }
-</style>
-
-
-<style>
     .profile-details{
         display: grid;
         grid-template-columns: 2fr 2fr; 
@@ -21,6 +22,9 @@
     <div></div>
 
     <div>
+        <!-- Display users First and Last name, and have a button for updating profile
+            When button is clicked user is directed to update-profile url with parameter of username /-->
+
         <hr>  
         <div style="display:grid;grid-template-columns: 5fr 1fr;">
             <div>      
@@ -32,7 +36,7 @@
         </div>
         <hr>  
 
-
+        <!-- Details of user is displayed /-->
         <span class="profile-details">
 
             <div>           
@@ -46,7 +50,6 @@
             </div>   
         </span>
         <hr>
-
         <span class="profile-details">
             <div>
                 <h6> email: {{user.email}}</h6>
@@ -61,11 +64,12 @@
             </div>
         </span> 
 
-
-            <span>
-                <hr>  
-                <h4>Offerings and Events</h4>
-                <hr>  
+        <!-- Services provided by user is displayed 
+            For loop is used to display all services/-->
+        <span>
+            <hr>  
+            <h4>Offerings and Events</h4>
+            <hr>  
         {% for offer_name in offers %}
             <h5><a href="{% url 'offerings' offer_name.serviceID %}">{{ offer_name.keywords}}</a></h5>
             {% if request.user == offer_name.providerID %}
@@ -78,15 +82,15 @@
                 <h6>  </h6>
             {% endif %}
             <span>@ {{ offer_name.providerID}}</span>
-            <p class="text-secondary">
-                <h6>on {{ offer_name.startingDate}}</h6>
-                <h6>for {{ offer_name.duration}} hours</h6>
-                <h6>at {{ offer_name.location}}</h6>
-                <small>{{ offer_name.tag}}</small>
-            </p>
-            <hr>    
+                <p class="text-secondary">
+                    <h6>on {{ offer_name.startingDate}}</h6>
+                    <h6>for {{ offer_name.duration}} hours</h6>
+                    <h6>at {{ offer_name.location}}</h6>
+                    <small>{{ offer_name.tag}}</small>
+                </p>
+                <hr>    
         {% endfor %}
-            </span>
+        </span>
     </div>
 
     <div>

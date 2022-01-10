@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for listing assignments to user
+    Page gets providedAssignments, receivedAssignments from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .offerings-container{
         display: grid;
@@ -17,7 +21,7 @@
     }
 </style>
  
-
+<!-- This lists the assignments for offered services /-->
 {% if providedAssignments.count > 0 %}
     </span> 
         <hr>
@@ -27,13 +31,12 @@
 
     {% for myAssign in providedAssignments %}
 
+        <!-- For each assignment, related service information is displayed to user /-->
         <div class="offerings-container">
             <div>
-
             </div>
 
             <div>
-
                 <span>
                     <div class="format-container">
                         <div>
@@ -56,6 +59,10 @@
                             <hr>
                             <h6> {{ myAssign.requestID.serviceID.serviceType }} at {{ myAssign.requestID.serviceID.tag }} category</h6>
                             <hr>
+                
+                            <!-- If service has not started yet, user cannot confirm this assigment,
+                                meaning confirm this service has happened /-->
+
                             {% if myAssign.requestID.serviceID.startingDate|timesince >= "1 min"  %}
                                 <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
                             {% else %}
@@ -76,6 +83,7 @@
 {% endif %}
 
 
+<!-- This lists the assignments for received services /-->
 {% if receivedAssignments.count > 0 %}
     </span> 
         <hr>
@@ -84,14 +92,13 @@
     <span>
 
     {% for myAssign in receivedAssignments %}
-
+        
+        <!-- For each assignment, related service information is displayed to user /-->
         <div class="offerings-container">
             <div>
-
             </div>
 
             <div>
-
                 <span>
                     <div class="format-container">
                         <div>
@@ -114,6 +121,11 @@
                             <hr>
                             <h6> Recurrance: {{ myAssign.requestID.serviceID.recurrance }}</h6>
                             <h6> {{ myAssign.requestID.serviceID.serviceType }} at {{ myAssign.requestID.serviceID.tag }} category</h6>
+                            
+                
+                            <!-- If service has not started yet, user cannot confirm this assigment,
+                                meaning confirm this service has happened /-->
+                            
                             {% if myAssign.requestID.serviceID.startingDate|timesince >= "1 min"  %}
                                 <a class="btn btn-primary btn-sm" href="{% url 'confirmService' myAssign.assignID %}" role="button">Confirm Service</a>
                             {% else %}
@@ -125,15 +137,11 @@
                 <hr>
 
             </div>
-
+            
             <div>
-
             </div>
         </div>
     {% endfor %}
 {% endif %}
-
-
-
 
 {% endblock content %}

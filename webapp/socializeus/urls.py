@@ -19,10 +19,15 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# URLs from landing is also added to patterns
+# Admin url is triggered from this file
+# All other URLs are retrieved from urls.py at landing
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('landing.urls')),
 
 ]
 
+# For pictures at Offering and Profile picture is address Media Urls below
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

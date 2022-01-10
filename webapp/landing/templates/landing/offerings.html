@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is showing information for a service
+    Page gets user, offers, applications as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .offerings-container{
         display: grid;
@@ -21,6 +25,8 @@
         <div>
 
             <span>
+
+                <!-- Display details of service /-->
                 <div class="format-container">
                     <div>
                         <img src="{{offers.picture.url}}" width="150" height="150"> 
@@ -34,7 +40,13 @@
                     </div>
                     <div>
 
+                        <!-- Based on the information of user, action buttons becomes available to user:
+                            - if user is provider, Edit,Delete,Assign buttons are availble
+                            - if user is not owner of service, Apply button appears /-->
+
                         {% if request.user == offers.providerID %}
+
+                            <!-- Buttons are disabled if Service has already started /-->
                             {% if offers.startingDate|timesince >= "1 min"  %}
 
                                 <p class="text-danger">Service is over</>
@@ -46,6 +58,8 @@
                                 <a class="btn btn-primary btn-sm disabled" href="{% url 'assign' offers.serviceID %}" role="button">Assign</a>
                             {% else %}
 
+                                <!-- If service isn't started yet, but deadline for update passes, then Edit and Delete options are disabled
+                                    Assign button is still enabled/-->
                                 {% if offers.deadlineForUpdate|timesince >= "1 min"  %}
                                     <p class="text-danger">Edit timehorizon is over </p>
                                     <a class="btn btn-success btn-sm disabled" href="{% url 'update-offer' offers.serviceID %}" role="button">Edit</a>
@@ -61,18 +75,30 @@
                             {% endif %}
 
                         {% else %}  
+                            
+                            <!-- If user is someone looking for applying the service, then first it's checked that
+                                user has already applied or not/-->
                             {% if applications.count ==  0 %}
+
+                                <!-- If not applied, but there is not enough credit, this message is shown to user /-->
                                 {% if textMessage == 'Not Enough Credit' %}
                                     <p class="text-danger">Not Enough Credit</p>
+                                
                                 {% else %}
+                                    <!-- If there is enough credit, but service has started, then button is disabled, and info is displayed /-->
                                     {% if offers.startingDate|timesince >= "1 min"  %}
                                         <p class="text-danger">Service is over</p>
                                         <a class="btn btn-primary btn-sm disabled" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
                                     {% else %}
+                                    <!-- Otherwise, user can apply for the service /-->
                                         <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
                                     {% endif %}
                                 {% endif %}
                             {% else %}
+                                
+                                <!-- If user has already applied for the service,
+                                        -service cannot be canceled if update deadline has passed
+                                /-->
                                 {% for a in applications %}
                                     {% if request.user == a.requesterID %}
                                         <h7> Already applied </h7> 
@@ -82,11 +108,14 @@
                                         {% else %}
                                             <a class="btn btn-danger btn-sm" href="{% url 'delete-Request' a.requestID %}" role="button">Cancel</a>
                                         {% endif %}
-
+                                    <!-- If user didn't apply for the service yet,
+                                        -if service has started, Apply button is disabled
+                                        -User can apply otherwise  
+                                    /-->
                                     {% else %}
                                         {% if offers.startingDate|timesince >= "1 min"  %}
                                             <p class="text-danger">Service is over</p>
-                                            <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
+                                            <a class="btn btn-primary btn-sm disabled" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
                                         {% else %}
                                             <a class="btn btn-primary btn-sm" href="{% url 'request-Service' offers.serviceID %}" role="button">Apply</a>
                                         {% endif %}
@@ -100,6 +129,7 @@
             </span> 
             <hr>
 
+            <!-- Display other details of service /-->
             <h4> {{ offers.serviceInfo }}</h4>
             <h5> {{ offers.duration }} hour(s) {{ offers.meetingType }} event</h5>
             <h5> on {{ offers.startingDate }}</h5>

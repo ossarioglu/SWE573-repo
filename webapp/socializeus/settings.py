@@ -51,6 +51,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'socializeus.urls'
 
+# Templates folder setup is done here
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -71,16 +72,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'socializeus.wsgi.application'
 
+# Static files for picture required MEDIA_URL setup
+# This setup is used for picture fields at user profile (Profile object) and services (Offering object)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / 'static/media'
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
-
-
+# POSTGRES database is used for this project
+# This setup is for DOCKER's postgres image
 
 DATABASES = {
     'default': {
@@ -93,24 +93,24 @@ DATABASES = {
     }
 }
 
+# POSTGRES database is used for this project
+# During development phase, local database is created, and used
+# Below settings are for this local database
 """
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'socializeus',
-        'USER': 'ossarioglu',
-        'PASSWORD': 'ossarioglu',
-        'HOST': 'localhost',
-        'PORT': '',
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'socializeus',
+            'USER': 'ossarioglu',
+            'PASSWORD': 'ossarioglu',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
-
 """
 
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# Default Password validation from Django
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for deleting a  service
+    Page gets obj from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .delete-container{
         display: grid;
@@ -12,6 +16,7 @@
 <div class="delete-container">
     <div></div>
     <div>
+        <!-- If user confirms deletion, POST is sent to backend and service is deleted /-->
         <form method="POST" accept="">
             {% csrf_token %}
             <p> Are you sure you want to delete " {{obj}}"?</p>   

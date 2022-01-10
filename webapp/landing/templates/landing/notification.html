@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for displaying notifications to user
+    Page gets myNotes as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .notes-container{
         display: grid;
@@ -16,10 +20,10 @@
 
 <div class="notes-container">
         <div>
-
         </div>
 
         <div>
+            <!-- If there are no notifications, this is displayed to user /-->
             <span>
                 <h3> Notifications </h3>
                 <hr>
@@ -28,7 +32,12 @@
                 <h6> There is no messages </h6>
             {% endif %}
 
-
+            <!-- All notes for this user is displayed as rows
+                Each row has:
+                    - content of the note, 
+                    - a button linked to service related to this note, 
+                    - and action buton to make note Read or Unread 
+            /-->
             {% for note in myNotes %}
                 <span>
                     <div class="format-container">

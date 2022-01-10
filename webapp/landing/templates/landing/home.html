@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!--This is homepage for the website 
+    Page gets tags, offers, offer_count and  offer_count_old  as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .home-container{
         display: grid;
@@ -11,39 +15,51 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr; 
     }
-
 </style>
+
 
 <div class="home-container">
     <div>
-
     </div>
 
+    <!-- This block shows the categories of services provided at the website 
+        It's also used a seach option for filtering offerings in the category/-->
     <div>
         <h5> Categories </h5>
         <hr>
         
         <div>
+            <!--Filter all offers /-->
             <a href="{% url 'home' %}">All</a>
         </div>
         
         {% for tag in tags %}
             <div>
+                <!-- Each category name is sent to URL as a search paramateer /-->
                 <a href="{% url 'home'%}?q={{tag.tagName}}">{{tag.tagName}}</a>
             </div>
         {% endfor %}
     </div>
 
     <div>
-        <h3> Listed Offerings </h3>
+        <!--All services are listed in this block including number of services for the queried search /-->
+        <h3> Listed Offerings and Events </h3>
         <h5>{{ offer_count }} offerings and events available </h5>
 
+        <!--Links for new offering and event /-->
         <a class="btn btn-outline-success" href="{% url 'create-offer' 'Offering' %}" role="button" > New Offer </a>
         <a class="btn btn-outline-primary" href="{% url 'create-offer' 'Event' %}" role="button" > New Event </a>
 
         <hr>
     
         <div>        
+            <!--This part is listing active services
+                It shows information of services and buttons for actions
+                Buttons are visible according to user profile
+                    - if provider: Details, Edit, Delete
+                    - if applier: Details 
+                Buttons are enabled or disabled according to time passes for update deadline or start date
+            /-->
             {% for offer_name in offers %}
             {% if offer_name.status == 'New' %}
                 <div class="offer-container">
@@ -60,6 +76,8 @@
                         {% endif %}
                         
                         <h6>  </h6>
+                        
+                        <!--User profile can be visited by clicking on username /-->
                         <span>
                             {{ offer_name.serviceType}} by @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>
                         </span>
@@ -85,6 +103,8 @@
     </div>
 </div>
 
+
+
 <div class="home-container">
     <div>
     </div>
@@ -92,6 +112,10 @@
     <div>
     </div>
     <div>
+
+        <!--This part is listing historic services 
+            Information for service can be visible by clicking on Details
+        /-->
         <h3> Previous Services </h3>
         <h5>{{ offer_count_old }} services happened </h5>
 
@@ -105,14 +129,8 @@
                         <h5>{{ offer_name.keywords}}</h5>
                         {% if offer_name.startingDate|timesince >= "1 min"  %}
                             <p class="text-danger">Service is over</p>
-                        {% else %}
-                            <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
-                            {% if request.user == offer_name.providerID %}
-                                <a class="btn btn-success btn-sm" href="{% url 'update-offer' offer_name.serviceID %}" role="button">Edit</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'delete-offer' offer_name.serviceID %}" role="button">Delete</a>
-                            {% endif %}
                         {% endif %}
-                        
+                        <a class="btn btn-primary btn-sm" href="{% url 'offerings' offer_name.serviceID %}" role="button">Details</a>
                         <h6>  </h6>
                         <span>
                             {{ offer_name.serviceType}} by @<a href="{% url 'user-profile' offer_name.providerID %}" class="link-dark">{{ offer_name.providerID}}</a>

@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for cancelling a request to a service
+    Page gets obj from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .delete-container{
         display: grid;
@@ -14,6 +18,7 @@
     <div>
         <form method="POST" accept="">
             {% csrf_token %}
+            <!-- If user confirms cancelation, this sent to backend via POST /-->
             <p> Are you sure you want to cancel request " {{obj}}"?</p>   
             <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
             <input type="submit" value="Confirm" />

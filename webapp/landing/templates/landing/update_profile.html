@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<!-- This page is for updating user profile
+    Page gets user, myProfile, and form from backend as input /-->
+
+<!-- Styling for Div containers /-->
 <style>
     .profile-container{
         display: grid;
@@ -15,10 +19,13 @@
 
     </div>
 
-    <div>   
+    <div> 
+        
+        <!-- Form for updating user profile /-->
         <form class="row g-3 needs-validation" method="POST" action="" novalidate>
             {% csrf_token %}
 
+            <!-- Text Field for user's firstname /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">First Name</span>
@@ -29,6 +36,7 @@
                 </div>
             </div>
 
+            <!-- Text Field for user's last name /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Last Name</span>
@@ -39,6 +47,7 @@
                 </div>
             </div>
 
+            <!-- Text Field for user's email /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Email</span>
@@ -49,6 +58,7 @@
                 </div>
             </div>
 
+            <!-- Text Field for user's location /-->
             <div class="col-md-6">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Location</span>
@@ -60,6 +70,7 @@
             </div>
             
 
+            <!-- TextArea Field for user's user details /-->
             <div class="col-md-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Details</span>
@@ -70,6 +81,7 @@
                 </div>
             </div>
 
+            <!-- File picker field for user's profile picture /-->
             <div class="col-md-10">
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">Profile Picture</span>
@@ -85,20 +97,12 @@
             <div class="col-2">
                 <button class="btn btn-outline-success" type="submit">Update</button>
             </div>
-            <!-- input type="submit" name="Register" /-->
-
         </form>
-
     </div>
 
-    <div>
-        
-    </div>
+    <div>  </div>
     
 </div>
-
-
-
 
 
 
