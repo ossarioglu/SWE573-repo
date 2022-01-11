@@ -71,8 +71,7 @@ class TestAppViews(TestCase):
     def test_offering_GET(self):
         username = self.user.username
         password = self.user.password
-        print('username:'+username)
-        print('password:'+password)
+
         self.client.login(username=username, password=password)
         print(self.user.is_authenticated)
 

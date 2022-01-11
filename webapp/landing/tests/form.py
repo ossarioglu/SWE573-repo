@@ -2,7 +2,7 @@ from django.test import TestCase
 from landing.forms import MyRegisterForm
 from django.contrib.auth.models import User
 
-
+#Checks whether custom user creation form is valid
 class TestAppForms(TestCase):
     def setUp(self) -> None:
         self.username = 'user'

@@ -81,7 +81,8 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 
 # POSTGRES database is used for this project
 # This setup is for DOCKER's postgres image
-"""
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -107,7 +108,7 @@ DATABASES = {
         'PORT': '',
     }
 }
-
+"""
 
 
 # Default Password validation from Django
