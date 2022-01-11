@@ -81,7 +81,7 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 
 # POSTGRES database is used for this project
 # This setup is for DOCKER's postgres image
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -97,17 +97,17 @@ DATABASES = {
 # During development phase, local database is created, and used
 # Below settings are for this local database
 """
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'socializeus',
-            'USER': 'ossarioglu',
-            'PASSWORD': 'ossarioglu',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'socializeus',
+        'USER': 'ossarioglu',
+        'PASSWORD': 'ossarioglu',
+        'HOST': 'localhost',
+        'PORT': '',
     }
-"""
+}
+
 
 
 # Default Password validation from Django
