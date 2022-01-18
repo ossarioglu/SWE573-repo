@@ -184,7 +184,7 @@ def updateProfile(request, userKey):
 def createOffer(request, page):
 
     # OfferForm is called, all possible categories are called, and service type is set as posted 'page' information
-    form = OfferForm()
+    form = OfferForm(request.POST, request.FILES)
     myKeywords = Tag.objects.all()
     service = page
 
@@ -205,7 +205,7 @@ def createOffer(request, page):
         location = request.POST.get('location')
         recurrance = request.POST.get('recurrance')
         recurrancePeriod = request.POST.get('recurrancePeriod')
-        picture = request.POST.get('picture')
+        picture = request.FILES.get('picture')
         startingDate = str(request.POST.get('startingDate'))
         deadlineForCancel = str(request.POST.get('deadlineForCancel'))
         startingDate = datetime.strptime(startingDate, '%Y-%m-%d %H:%M')
@@ -230,8 +230,13 @@ def createOffer(request, page):
                 deadlineForUpdate = deadlineForCancel,
                 serviceType = service
             )
+
             if myService:
                 myService.save()
+                if request.FILES.get('picture') is not None:
+                    myService.picture = request.FILES.get('picture')
+                    myService.save()
+
             
             # Based on the selected period, event start date and deadline for changes are updated for next iteration 
             if recurrancePeriod == 'Weekly':
